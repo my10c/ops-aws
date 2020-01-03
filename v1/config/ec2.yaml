@@ -1,0 +1,19 @@
+
+bastion:
+  count: '1'
+  tags:
+    - Name: 'bastion'
+    - component: 'Operations'
+    - datacenter: 'us1'
+    - environment: 'prod'
+    - hostid: '01'
+    - tld: 'example.com'
+  sec_groups:
+    - 'trusted'
+    - 'bastion'
+  type: 't2.small'
+  create: True
+  public_ip: True
+  static_ip: True
+  vpc_placement: 'fe'
+  data_volume: '64'

@@ -1,0 +1,93 @@
+# Add new entry in alphabetical order, so it can be check easier against AWS
+# Rule
+#  Protocol : start port : end port : destination
+#  NOTE:
+#   - if start port == ALL then end port must be ALL : for TCP and UDP
+#     if start port == -1 then end port must be -1   : for ICMP
+#   - use the keyword 'none' for no in_rules or out_rules since
+#     the in_rules and out_rules must exist
+#   - make sure there is exacly 1 space between values!
+#   - other security group name can be used as destination
+#   sepcial identify names:
+#     Name:           info:
+#   - VPC_NET     vpc ipv4 cidr
+#   - VPC_FE      vpc (f)ront (e)nd network ipv4 cidr
+#   - VPC_BE      vpc (b)ack (e)nd network ipv4 cidr
+#   - VPC-NET_V6  vpc ipv6 cidr
+#   - VPC_FE_V6   vpc (f)ront (e)nd network ipv6 cidr
+#   - VPC_BE_V6   vpc (b)ack (e)nd network ipv6 cidr
+#
+# ** IMPORTANT: prefix the names example prod-bastion **
+
+# start with the security group names
+security_groups:
+  bastion:
+  trusted:
+  packer:
+  all:
+  rds:
+  https:
+  http:
+
+# for each group define their ingres and outgres rules
+bastion:
+  description: 'Allow SSH only from known IP'
+  in_rules:
+    - 'TCP 22 22 x.x.x.x/xx'
+  out_rules:
+    - 'ALL ALL ALL 0.0.0.0/0'
+
+trusted:
+  description: 'Trusted access'
+  in_rules:
+    - 'TCP 22 22 bastion'
+    - 'ICMP -1 -1 VPC_NET'
+    - 'ICMP -1 -1 VPC_NET_V6'
+  out_rules:
+    - 'ALL ALL ALL VPC_NET'
+    - 'ALL ALL ALL VPC_NET_V6'
+
+packer:
+  description: 'For AMI build, allow from VPC only'
+  in_rules:
+    - 'ALL ALL ALL VPC_NET'
+    - 'ALL ALL ALL VPC_NET_V6'
+  out_rules:
+    - 'ALL ALL ALL 0.0.0.0/0'
+    - 'ALL ALL ALL ::/0'
+
+all:
+  description: 'Allow all protcols and ICMP only from known IPs'
+  in_rules:
+    - 'TCP ALL ALL xx.xx.xx.xx/xx'
+    - 'ICMP -1 -1 xx.xx.xx.xx/xx'
+  out_rules:
+    - 'ALL ALL ALL 0.0.0.0/0'
+    - 'ALL ALL ALL ::/0'
+
+rds:
+  description: 'Access to RDS'
+  in_rules:
+    - 'TCP 3306 3306 VPC_BE'
+    - 'TCP 5432 5432 VPC_BE'
+    - 'ICMP -1 -1 rds'
+  out_rules:
+    - 'TCP ALL ALL VPC_BE'
+    - 'ICMP -1 -1 stage-tau-aurora'
+
+https:
+  description: 'Allow HTTPS from anywhere'
+  in_rules:
+    - 'TCP 443 443 ALL'
+  out_rules:
+    - 'ALL ALL ALL 0.0.0.0/0'
+    - 'ALL ALL ALL ::/0'
+
+http:
+  description: 'Allow HTTP only within the VCC'
+  in_rules:
+    - 'TCP 80 80 VPC_NET'
+    - 'TCP 80 80 VPC_NET_V6'
+  out_rules:
+    - 'ALL ALL ALL 0.0.0.0/0'
+    - 'ALL ALL ALL ::/0'

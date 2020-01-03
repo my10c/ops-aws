@@ -1,0 +1,11 @@
+January 2, 2020
+
+Pickup where I left, some major change will need to be done
+v1 is the old code and v2 the code im working on
+
+v2: update
+validator and connector :  OK
+region : ok
+
+vpc : next
+  subnet, nat-gateway, internet-gateway,  route-table :  part of vpc next

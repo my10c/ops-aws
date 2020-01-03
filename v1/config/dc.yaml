@@ -1,0 +1,82 @@
+# Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type - ami-01e24be29428c15b2
+# The Amazon Linux AMI is an EBS-backed, AWS-supported image.
+# The default image includes AWS command line tools, Python, Ruby, Perl, and Java.
+# The repositories include Docker, PHP, MySQL, PostgreSQL, and other packages.
+
+us-east-1:
+  dc_region: 'Virginia'
+  dc_endpoint: 'us-east-1'
+  dc_isocode: 'us-va'
+  dc_public_domain: 'example.com'
+  dc_domain: 'us-va.internal.example.com'
+  dc_network: '172.16.0.0'
+  dc_cidr: '18'
+  dc_bastion: 'capitals'
+  dc_ami: 'ami-01e24be29428c15b2'
+  dc_ipv6: True
+
+us-east-2:
+  dc_region: 'Ohio'
+  dc_endpoint: 'us-east-2'
+  dc_isocode: 'us-oh'
+  dc_public_domain: 'example.com'
+  dc_domain: 'us-oh.internal.example.com'
+  dc_network: '172.16.64.0'
+  dc_cidr: '18'
+  dc_bastion: 'bluejackets'
+  dc_ami: 'ami-01e24be29428c15b2'
+  dc_ipv6: True
+
+us-west-1:
+  dc_region: 'California'
+  dc_endpoint: 'us-west-1'
+  dc_isocode: 'us-ca'
+  dc_public_domain: 'example.com'
+  dc_domain: 'us-ca.internal.example.com'
+  dc_network: '172.16.128.0'
+  dc_cidr: '18'
+  dc_bastion: 'sharks'
+  dc_ami: 'ami-01e24be29428c15b2'
+  dc_ipv6: True
+
+us-west-2:
+  dc_region: 'Oregon'
+  dc_endpoint: 'us-west-2'
+  dc_isocode: 'us-or'
+  dc_public_domain: 'example.com'
+  dc_domain: 'us-or.internal.example.com'
+  dc_network: '172.16.192.0'
+  dc_cidr: '18'
+  dc_bastion: 'winterhawks'
+  dc_ami: 'ami-01e24be29428c15b2'
+  dc_ipv6: True
+
+# fake: should break the script correctly
+us-mnt-2:
+  dc_region: 'Colorado'
+  dc_endpoint: 'us-mnt-2'
+  dc_isocode: 'us-co'
+  dc_public_domain: 'example.com'
+  dc_domain: 'us-co.internal.example.com'
+  dc_network: '172.16.128.0'
+  dc_cidr: '18'
+  dc_bastion: 'avalanche'
+  dc_ami: 'ami-01e24be29428c15b2'
+  dc_ipv6: True
+
+# to be configured
+#   ap-south-1      ID  Asia-Pacific-(Mumbai)
+#   ap-northeast-2  KR  Asia-Pacific-(Seoul)
+#   ap-southeast-1  SG  Asia-Pacific-(Singapore)
+#   ap-southeast-2  AU  Asia-Pacific-(Sydney)
+#   ap-northeast-1  JP  Asia-Pacific-(Tokyo)
+#   ap-northeast-3  JP  Asia Pacific (Osaka)
+#   ca-central-1    CA  Canada-(Central)
+#   cn-north-1      CN  China-(Beijing)
+#   cn-northwest-1  CN  China (Ningxia)
+#   eu-central-1    DE  EU-(Frankfurt)
+#   eu-west-1       IE  EU-(Ireland)
+#   eu-west-2       UK  EU-(London)
+#   eu-west-3       FR  EU-(Paris)
+#   eu-north-1      SE  EU (Stockholm)
+#   sa-east-1       BE  South-America-(São Paulo)

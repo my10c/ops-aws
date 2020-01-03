@@ -1,0 +1,8 @@
+---
+
+# change to your keynames
+name-1:
+   pubkey: 'your rsa public key'
+
+name-2:
+   pubkey: 'your rsa public key'

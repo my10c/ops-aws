@@ -1,0 +1,296 @@
+---
+#
+# Set to correct values: public_domain, private_domain and ami
+#
+# iso-code in USA uses state code, other uses airport code
+
+us-east-1:
+  location: 'Virginia'
+  zone: 'use1'
+  isocode: 'us-va'
+  public_domain: 'use1.example.com'
+  private_domain: 'use1.internal.example.com'
+  network: '172.16.0.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+us-east-2:
+  location: 'Ohio'
+  zone: 'use2'
+  isocode: 'us-oh'
+  public_domain: 'use2.example.com'
+  private_domain: 'use2.internal.example.com'
+  network: '172.16.64.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+us-west-1:
+  location: 'California'
+  zone: 'usw1'
+  isocode: 'us-ca'
+  public_domain: 'usw1.example.com'
+  private_domain: 'usw1.internal.example.com'
+  network: '172.16.128.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+us-west-2:
+  location: 'Oregon'
+  zone: 'usw2'
+  isocode: 'us-or'
+  public_domain: 'usw2.example.com'
+  private_domain: 'usw2.internal.example.com'
+  network: '172.16.192.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+ap-northeast-1:
+  location: 'Tokyo'
+  zone: 'apne1'
+  isocode: 'jp-nrt'
+  public_domain: 'apne1.example.com'
+  private_domain: 'apne1.internal.example.com'
+  network: '172.17.0.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+ap-northeast-2:
+  location: 'Seoul'
+  zone: 'apne2'
+  isocode: 'kr-icn'
+  public_domain: 'apne2.example.com'
+  private_domain: 'apne2.internal.example.com'
+  network: '172.17.64.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+ap-northeast-3:
+  location: 'Osaka'
+  zone: 'apne3'
+  isocode: 'jp-item'
+  public_domain: 'apne3.example.com'
+  private_domain: 'apne3.internal.example.com'
+  network: '172.17.128.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+ap-southeast-1:
+  location: 'Singapore'
+  zone: 'apse1'
+  isocode: 'sg-sin'
+  public_domain: 'apse1.example.com'
+  private_domain: 'apse1.internal.example.com'
+  network: '172.17.192.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+ap-southeast-2:
+  location: 'Sydney'
+  zone: 'apse2'
+  isocode: 'au-syd'
+  public_domain: 'apse2.example.com'
+  private_domain: 'apse2.internal.example.com'
+  network: '172.18.0.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+ap-south-1:
+  location: 'Mumbai'
+  zone: 'aps1'
+  isocode: 'in-bom'
+  public_domain: 'aps1.example.com'
+  private_domain: 'aps1.internal.example.com'
+  network: '172.18.64.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+ap-east-1:
+  location: 'Hong Kong'
+  zone: 'ape1'
+  isocode: 'cn-hkg'
+  public_domain: 'ape1.example.com'
+  private_domain: 'ape1.internal.example.com'
+  network: '172.18.128.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+ca-central-1:
+  location: 'Torronto'
+  zone: 'cac1'
+  isocode: 'ca-yyz'
+  public_domain: 'cac1.example.com'
+  private_domain: 'cac1.internal.example.com'
+  network: '172.18.192.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+cn-north-1:
+  location: 'Beijing'
+  zone: 'cnn1'
+  isocode: 'cn-pek'
+  public_domain: 'cnn1.example.com'
+  private_domain: 'cnn1.internal.example.com'
+  network: '172.19.0.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+cn-northwest-1:
+  location: 'Ningxia'
+  zone: 'cnnw1'
+  isocode: 'cn-inc'
+  public_domain: 'cnnw1.example.com'
+  private_domain: 'cnnw1.internal.example.com'
+  network: '172.19.64.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+eu-central-1:
+  location: 'Frankfurt'
+  zone: 'euc1'
+  isocode: 'de-fra'
+  public_domain: 'euc1.example.com'
+  private_domain: 'euc1.internal.example.com'
+  network: '172.19.128.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+eu-west-1:
+  location: 'Dublin'
+  zone: 'euw1'
+  isocode: 'ie-dub'
+  public_domain: 'euw1.example.com'
+  private_domain: 'euw1.internal.example.com'
+  network: '172.19.192.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+eu-west-2:
+  location: 'London'
+  zone: 'euw3'
+  isocode: 'gb-lhr'
+  public_domain: 'euw3.example.com'
+  private_domain: 'euw3.internal.example.com'
+  network: '172.20.0.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+eu-west-3:
+  location: 'Paris'
+  zone: 'euw3'
+  isocode: 'fr-cdg'
+  public_domain: 'euw3.example.com'
+  private_domain: 'euw3.internal.example.com'
+  network: '172.20.64.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+eu-north-1:
+  location: 'Stockholm'
+  zone: 'eun1'
+  isocode: 'se-arn'
+  public_domain: 'eun1.example.com'
+  private_domain: 'eun1.internal.example.com'
+  network: '172.20.128.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+me-south-1:
+  location: 'Bahrain'
+  zone: 'mes1'
+  isocode: 'bh-bah'
+  public_domain: 'mes1.example.com'
+  private_domain: 'mes1.internal.example.com'
+  network: '172.20.192.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+sa-east-1:
+  location: 'Sao Paulo'
+  zone: 'sae1'
+  isocode: 'br-gru'
+  public_domain: 'sae1.example.com'
+  private_domain: 'sae1.internal.example.com'
+  network: '172.21.0.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+# fake: should break the script correctly
+us-mnt-2:
+  location: 'Colorado'
+  endpoint: 'us-mnt-2'
+  zone: 'usm1'
+  isocode: 'us-co'
+  public_domain: 'usm1.example.com'
+  private_domain: 'usm1.internal.example.com'
+  network: '172.17.128.0'
+  cidr: '18'
+  ami: 'need to be set'
+  ipv6: True
+
+## Note: future to be build by AWS in 2020 and beyond, the region-code and zone are guessed
+## information from https://aws.amazon.com/about-aws/global-infrastructure/
+
+## eu-south-1:
+##   location: 'Madrid
+##   zone: 'eus1'
+##   isocode: 'es-mad'
+##   public_domain: 'eus1.example.com'
+##   private_domain: 'eus1.internal.example.com'
+##   network: '172.17.192.0'
+##   cidr: '18'
+##   ami: 'need to be set'
+##   ipv6: True
+
+## eu-west-4:
+##   location: 'Milan'
+##   zone: 'euw4'
+##   isocode: 'it-mxp'
+##   public_domain: 'euw4.example.com'
+##   private_domain: 'euw4.internal.example.com'
+##   network: '172.18.0.0'
+##   cidr: '18'
+##   ami: 'need to be set'
+##   ipv6: True
+
+## af-south-1: ???
+##   location: 'Town Cape'
+##   zone: 'afs1'
+##   isocode: 'za-cpt
+##   public_domain: 'afs1.example.com'
+##   private_domain: 'afs1.internal.example.com'
+##   network: '172.18.64.0'
+##   cidr: '18'
+##   ami: 'need to be set'
+##   ipv6: True
+
+## ap-southeast-3:
+##   location: 'Jakarta'
+##   zone: 'apse3'
+##   isocode: 'id-cgk'
+##   public_domain: 'apse3.example.com'
+##   private_domain: 'apse3.internal.example.com'
+##   network: '172.18.128.0'
+##   cidr: '18'
+##   ami: 'need to be set'
+##   ipv6: True

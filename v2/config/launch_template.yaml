@@ -1,0 +1,28 @@
+---
+
+name-1:
+  VersionDescription: 'Initial release'
+  IamInstanceProfile: 'profile arn you want to use'
+  BlockDeviceMappings:
+    DeviceName: '/dev/sda1'
+    Ebs:
+      VolumeSize: 'size in GB'
+      DeleteOnTermination: true
+  ImageId: 'ami id you want to use'
+  InstanceType: 'instance type you want to use'
+  KeyName: 'keypair name you want to use'
+  Monitoring: true
+  Placement:
+    Tenancy: 'default'
+  InstanceInitiatedShutdownBehavior: 'terminate'
+  UserData:
+    - 'your base64 userdata you want to use'
+  # Tags, you can add up to 55 tags
+  TagSpecifications:
+    hostid: 'none'
+    datacenter: ''
+    costcente: ''
+    environment: ''
+  SecurityGroupIds:
+    - 'name of the security group, one per line'
+
