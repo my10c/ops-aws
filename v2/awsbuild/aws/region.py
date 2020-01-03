@@ -19,6 +19,12 @@ class Region():
     def __init__(self, **kwargs):
         """ initial the object """
         self.session = kwargs.get('session', {})
+        self.cmd_cfg = kwargs.get('cmd_cfg', {})
+
+    def do_cmd(self):
+        """ main command handler """
+        if self.cmd_cfg['command'] == 'describe':
+            self.describe()
 
     def describe(self):
         """ get the available regions information """

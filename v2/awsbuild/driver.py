@@ -17,7 +17,7 @@ from awsbuild.misc.signal_handler import install_int_handler
 from awsbuild.misc.validator import Validator
 from awsbuild.connector.connector import Connector
 from awsbuild.vpc.vpc import VPC
-from awsbuild.vpc.region import Region
+from awsbuild.aws.region import Region
 from awsbuild.misc.spinner import spin_message, dot_message
 
 def main():
@@ -97,9 +97,9 @@ def main():
 #        nat_gateway = NATGateway(cmd_cfg=cmd_cfg, session=session)
 #        return nat_gateway.do_cmd()
 
-#    if cmd_cfg['service'] == 'region':
-#        region = Region(cmd_cfg=cmd_cfg, session=session)
-#        return region.do_cmd()
+    if cmd_cfg['service'] == 'region':
+        region = Region(cmd_cfg=cmd_cfg, session=session)
+        return region.do_cmd()
 
 #    if cmd_cfg['service'] == 'target-group':
 #        target_group = TargetGroup(cmd_cfg=cmd_cfg, session=session)

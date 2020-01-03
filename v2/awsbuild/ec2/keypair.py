@@ -22,6 +22,20 @@ class AwsKey():
         self.key_name = kwargs.get('key_name', {})
         self.key_value = kwargs.get('key_value', {})
 
+    def do_cmd(self):
+        """ main command handler """
+          if self.cmd_cfg['command'] == 'describe':
+              vpc_ids, vpc_info = self.describe()
+              if len(vpc_ids) == 0:
+                  print('No VPC found with the given tag, please be more speciific')
+                  return
+              if len(vpc_ids) > 1:
+                  print('Found more then on VPC with the given tag, please be more speciific!')
+              output = PrettyPrinter(indent=2, width=41, compact=False)
+              for info in vpc_info['Vpcs']:
+                  print('\n⚬ VPC ID {}'.format(info['VpcId']))
+                  output.pprint(info)
+
     def add(self):
         """ add a key """
         try:

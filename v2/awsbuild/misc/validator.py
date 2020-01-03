@@ -37,13 +37,14 @@ class Validator():
         region_cfg = self._valid_region(region=self.region,\
             fqpn=self.configdir + '/' + const.CFG_FILES['vpc'][0])
         for service in services:
-            service_cfg = self.configdir + '/' +\
-                const.CFG_FILES[service][0]
-            if service == 'vpc':
-                self.settings['vpc'] = region_cfg
-            else:
-                self.settings[service] = self._valid_yaml(
-                    fqpn=service_cfg)
+            if const.CFG_FILES[service][0] != 'none':
+                service_cfg = self.configdir + '/' +\
+                    const.CFG_FILES[service][0]
+                if service == 'vpc':
+                    self.settings['vpc'] = region_cfg
+                else:
+                    self.settings[service] = self._valid_yaml(
+                        fqpn=service_cfg)
         self.valid = {
             'region': self.region,
             'service': self.service,
@@ -63,8 +64,9 @@ class Validator():
         services = self._get_service_dependancy(service=self.service)
         # check service configuration is a valid yaml
         for service in services:
-            self._valid_yaml(fqpn=self.configdir + '/' +\
-                const.CFG_FILES[service][0])
+            if const.CFG_FILES[service][0] != 'none':
+                self._valid_yaml(fqpn=self.configdir + '/' +\
+                    const.CFG_FILES[service][0])
         return True
 
     @classmethod
