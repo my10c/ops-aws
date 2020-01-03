@@ -62,40 +62,63 @@ def main():
     validator = Validator(given_arg=vars(args))
     _ = validator.is_valid()
     cmd_cfg = validator.get_valid()
+    dot_message(message='All configuration and given argument validated', seconds=5)
 
     # create an AWS session connector
     session = Connector(aws=cmd_cfg['settings']['aws']['credentials'],\
         region=cmd_cfg['settings']['vpc']['region'])
+    dot_message(message='AWS session created', seconds=5)
 
-    spin_message(message='Test spinner', seconds=10)
-    dot_message(message='Test dots', seconds=10)
+#    if cmd_cfg['service'] == 'autoscale-group':
+#        autoscale_group = AutoscaleGroup(cmd_cfg=cmd_cfg, session=session)
+#        return autoscale_group.do_cmd()
 
-
-#    if cmd_cfg['service'] == 'vpc':
-#        vpc = VPC(cmd_cfg=cmd_cfg, session=session)
-#        vpc.do_cmd()
-#
 #    if cmd_cfg['service'] == 'elbv2':
 #        elbv2 = ELBv2(cmd_cfg=cmd_cfg, session=session)
-#        elbv2.do_cmd()
-#
+#        return elbv2.do_cmd()
+
 #    if cmd_cfg['service'] == 'instance':
 #        instance = Instance(cmd_cfg=cmd_cfg, session=session)
-#       instancevpc.do_cmd()
-#
+#       return instancevpc.do_cmd()
+
+#    if cmd_cfg['service'] == 'internet-gateway':
+#        internet-gateway = InternetGateway(cmd_cfg=cmd_cfg, session=session)
+#        return internet-gateway.do_cmd()
+
 #    if cmd_cfg['service'] == 'keypair':
 #        keypair = KeyPair(cmd_cfg=cmd_cfg, session=session)
-#        keypair.do_cmd()
-#
-#    if cmd_cfg['service'] == 'launch_template':
+#        return keypair.do_cmd()
+
+#    if cmd_cfg['service'] == 'launch-template':
 #        launch_template = LaunchTemplate(cmd_cfg=cmd_cfg, session=session)
-#        launch_template.do_cmd()
-#
-#    if cmd_cfg['service'] == 'security_group':
+#        return launch_template.do_cmd()
+
+#    if cmd_cfg['service'] == 'nat-gateway':
+#        nat_gateway = NATGateway(cmd_cfg=cmd_cfg, session=session)
+#        return nat_gateway.do_cmd()
+
+#    if cmd_cfg['service'] == 'region':
+#        region = Region(cmd_cfg=cmd_cfg, session=session)
+#        return region.do_cmd()
+
+#    if cmd_cfg['service'] == 'target-group':
+#        target_group = TargetGroup(cmd_cfg=cmd_cfg, session=session)
+#        return target_group.do_cmd()
+
+#    if cmd_cfg['service'] == 'security-group':
 #        security_group = SecurityGroup(cmd_cfg=cmd_cfg, session=session)
-#        security_group.do_cmd()
-#
+#        return security_group.do_cmd()
+
+#    if cmd_cfg['service'] == 'subnet':
+#        subnet = Subnet(cmd_cfg=cmd_cfg, session=session)
+#        return subnet.do_cmd()
+
 #    if cmd_cfg['service'] == 'target_group':
 #        target_group = TargetGroup(cmd_cfg=cmd_cfg, session=session)
-#        target_group.do_cmd()
+#        return target_group.do_cmd()
+
+    if cmd_cfg['service'] == 'vpc':
+        vpc = VPC(cmd_cfg=cmd_cfg, session=session)
+        return vpc.do_cmd()
+
     return 0

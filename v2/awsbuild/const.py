@@ -54,29 +54,41 @@ LOCATION = {
 # after this is the name of service it depends on
 CFG_FILES = {
     'aws': ['aws.yaml'],
-    'autoscale_group': ['autoscale_group.yaml', 'aws', 'vpc'],
+    'autoscale-group': ['autoscale_group.yaml', 'aws', 'vpc'],
     'elbv2': ['elbv2.yaml', 'aws', 'vpc'],
+    'internet-gateway': ['vpc.yaml', 'aws'],
     'instances': ['instances.yaml', 'aws', 'vpc'],
     'keypair': ['keypair.yaml', 'aws', 'vpc'],
-    'launch_template': ['launch_template.yaml', 'aws', 'vpc'],
-    'security_group': ['security_group.yaml', 'aws', 'vpc'],
-    'target_group': ['target_group.yaml', 'aws', 'vpc'],
+    'launch-template': ['launch_template.yaml', 'aws', 'vpc'],
+    'nat-gateway': ['vpc.yaml', 'aws'],
+    'region': ['aws.yaml'],
+    'route_table': ['vpc.yaml', 'aws'],
+    'security-group': ['security_group.yaml', 'aws', 'vpc'],
+    'subnet': ['vpc.yaml', 'aws'],
+    'target-group': ['target_group.yaml', 'aws', 'vpc'],
     'vpc': ['vpc.yaml', 'aws']
 }
 SERVICE_ACTIONS = {
-    'vpc': ['create', 'describe', 'destroy'],
+    'autoscale-group': ['create', 'describe', 'modify', 'destroy'],
     'elbv2': ['create', 'describe', 'modify', 'destroy'],
+    'internet-gateway': ['describe'],
     'instance': ['create', 'describe', 'start', 'stop', 'destroy'],
     'keypair': ['create', 'describe', 'destroy'],
-    'launch_template': ['create', 'describe', 'destroy'],
-    'security_group': ['create', 'describe', 'modify', 'destroy'],
-    'target_group': ['create', 'describe', 'modify', 'destroy']
+    'launch-template': ['create', 'describe', 'destroy'],
+    'nat-gateway': ['describe'],
+    'region': ['describe'],
+    'route_table': ['describe'],
+    'security-group': ['create', 'describe', 'modify', 'destroy'],
+    'subnet': ['describe'],
+    'target-group': ['create', 'describe', 'modify', 'destroy'],
+    'vpc': ['create', 'describe', 'destroy']
 }
 SERVICE_OPTIONS = {
+    'autoscale-group': {'optional': 'name'},
     'elbv2': {'optional': 'name'},
     'instance': {'optional': 'name'},
     'keypair': {'optional': 'name'},
-    'launch_template': {'optional': 'name'},
-    'security_group': {'optional': 'name'},
-    'target_group': {'optional': 'name'}
+    'launch-template': {'optional': 'name'},
+    'security-group': {'optional': 'name'},
+    'target-group': {'optional': 'name'}
 }
