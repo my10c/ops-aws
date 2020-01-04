@@ -11,10 +11,9 @@
 #from logging import critical, warning
 
 
-class AutoscaleGroup():
-    """ Class for the AWS Autoscale Group
+class RouteTable():
+    """ Class for the AWS Route Table
     """
-
     def __init__(self, **kwargs):
         """ initial the object """
         self.cmd_cfg = kwargs.get('cmd_cfg', {})
@@ -39,17 +38,17 @@ class AutoscaleGroup():
         return False
 
     def create(self):
-        """ create autoscale group(s)  """
+        """ create a route table in the vpc  """
         print('create TODO')
 
     def describe(self):
-        """ get the autoscale group(s) info """
+        """ get the route table(s) info in the vpc"""
         print('describe TODO')
 
     def modify(self):
-        """ modify the autoscale group(s) """
+        """ modify a route table in the vpc """
         print('modify TODO')
 
     def destroy(self):
-        """ destroy the autoscale group(s) """
+        """ destroy a route table in the vpc"""
         print('destroy TODO')

@@ -11,8 +11,8 @@
 #from logging import critical, warning
 
 
-class AutoscaleGroup():
-    """ Class for the AWS Autoscale Group
+class InternetGateway():
+    """ Class for AWS Internet Gateway
     """
 
     def __init__(self, **kwargs):
@@ -39,17 +39,17 @@ class AutoscaleGroup():
         return False
 
     def create(self):
-        """ create autoscale group(s)  """
+        """ create a internet gateway  """
         print('create TODO')
 
     def describe(self):
-        """ get the autoscale group(s) info """
+        """ get the internet gateway(s) info in the vpc """
         print('describe TODO')
 
     def modify(self):
-        """ modify the autoscale group(s) """
+        """ modify the internet gateway """
         print('modify TODO')
 
     def destroy(self):
-        """ destroy the autoscale group(s) """
+        """ destroy the internet gateway"""
         print('destroy TODO')

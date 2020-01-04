@@ -7,103 +7,49 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-# NOTE: EIP does not have EC2 resource
+#from pprint import PrettyPrinter
+#from logging import critical, warning
 
-from logging import critical, warning
-from bao_const import WAIT_TIMER
-from bao_spinner import spin_message
-from bao_set_tag import set_tag_client
 
-class AwsEIP():
-    """ Class to perform certain method to AWS EIP
+class EIP():
+    """ Class for the AWS EIP
     """
 
     def __init__(self, **kwargs):
         """ initial the object """
-        self.vpc_conn = None
-        self.aws_conn = kwargs.get('aws_conn', {})
-        self.ec2_client = self.aws_conn['ec2_client']
+        self.cmd_cfg = kwargs.get('cmd_cfg', {})
+        self.session = kwargs.get('session', {})
+        self.tag = self.cmd_cfg['tag']
 
-    def create_eip(self, **kwargs):
-        """ allocate an public IP """
-        tag = kwargs.get('tag', {})
-        try:
-            ip_info = self.ec2_client.allocate_address(
-                Domain='vpc'
-            )
-        except Exception as err:
-            critical('Unable allocate_address, ignored, error {}'.format(err))
-            return None
-        # need to for the ip to be come available!
-        spin_message(
-            message='Waiting {} seconds for the EIP to become available.'.format(WAIT_TIMER),
-            seconds=WAIT_TIMER
-        )
-        set_tag_client(ec2_client=self.ec2_client, resource_id=ip_info['AllocationId'], tag=tag)
-        return ip_info['AllocationId']
+        # DANGER WILL ROBINSON : we using wildcard as filter!
+        self.tag_filter = '*' + str(self.tag) + '*'
+        self.tag_filter = str(self.tag)
+        self.search_filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
 
-    def delete_eip(self, **kwargs):
-        """ delete the EIPs """
-        eips_list = kwargs.get('eips_list', [])
-        state_ok = True
-        # we ignore any issue, we just log the issue
-        for allocation_id in eips_list:
-            try:
-                self.ec2_client.release_address(
-                    AllocationId=allocation_id
-                )
-            except Exception as err:
-                warning('Unable to release elastic ip, ignored, error {}'.format(err))
-                state_ok = False
-        return state_ok
+    def do_cmd(self):
+        """ main command handler """
+        if self.cmd_cfg['command'] == 'describe':
+            return self.describe()
+        if self.cmd_cfg['command'] == 'create':
+            return self.create()
+        if self.cmd_cfg['command'] == 'modify':
+            return self.modify()
+        if self.cmd_cfg['command'] == 'destroy':
+            return self.destroy()
+        return False
 
-    def associate_eip(self, **kwargs):
-        """ associate the given EIP (id) to the given instance """
-        instance_id = kwargs.get('instance_id', {})
-        eip_id = kwargs.get('eip_id', {})
-        try:
-            self.ec2_client.associate_address(
-                InstanceId=instance_id,
-                AllocationId=eip_id
-            )
-            return True
-        except Exception as err:
-            warning('Unable to associate the EIP, error {}'.format(err))
-            return False
+    def create(self):
+        """ create a eip  """
+        print('create TODO')
 
-    def disassociate_eip(self, **kwargs):
-        """ disassociate the given EIP (id) """
-        eip_id = kwargs.get('eip_id', {})
-        try:
-            self.ec2_client.disassociate_address(
-                AllocationId=eip_id
-            )
-        except Exception as err:
-            warning('Unable to disassociate the EIP, ignored, error {}'.format(err))
-        try:
-            self.ec2_client.release_address(
-                AllocationId=eip_id
-            )
-            return True
-        except Exception as err:
-            warning('Unable to release the EIP, error {}'.format(err))
-            return False
+    def describe(self):
+        """ get the eip(s) info """
+        print('describe TODO')
 
-    def get_eip_info(self, **kwargs):
-        """ get all the elastic ips """
-        eip_list = []
-        filter_name = kwargs.get('filter_name', {})
-        filter_value = kwargs.get('filter_value', {})
-        search_filter = [{'Name' : filter_name, 'Values' : [filter_value]}]
-        try:
-            eips = self.ec2_client.describe_addresses(
-                Filters=search_filter
-            )
-        except Exception as err:
-            warning('Unable to get the EIPs info error {}'.format(err))
-            return None
-        for elastic_ip in eips['Addresses']:
-            for elastic_info in elastic_ip:
-                if elastic_info == 'AllocationId':
-                    eip_list.append(elastic_ip[elastic_info])
-        return eip_list
+    def modify(self):
+        """ modify the eip(s)"""
+        print('modify TODO')
+
+    def destroy(self):
+        """ destroy the eip(s) """
+        print('destroy TODO')

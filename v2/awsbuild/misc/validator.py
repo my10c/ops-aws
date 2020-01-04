@@ -25,6 +25,7 @@ class Validator():
         self.service = given_args['service']
         self.command = given_args['command']
         self.tag = given_args['tag']
+        self.name = given_args['name']
         self.valid = {}
         self.settings = {}
         # check given configuration directory
@@ -50,15 +51,16 @@ class Validator():
             'service': self.service,
             'command': self.command,
             'settings': self.settings,
-            'tag': self.tag
+            'tag': self.tag,
+            'name': self.name
         }
         return self.valid
 
     def is_valid(self):
         """ validate arguments and configuration files
         """
-        self._valid_service_command(service=self.service,\
-            command=self.command)
+        self._valid_service_command_name(service=self.service,\
+            command=self.command, name=self.name)
         self._valid_region(region=self.region,\
             fqpn=self.configdir + '/' + const.CFG_FILES['vpc'][0])
         services = self._get_service_dependancy(service=self.service)
@@ -104,11 +106,12 @@ class Validator():
         sys.exit(1)
 
     @classmethod
-    def _valid_service_command(cls, **kwargs):
+    def _valid_service_command_name(cls, **kwargs):
         """ check service and command
         """
         cls.service = kwargs.get('service', {})
         cls.command = kwargs.get('command', {})
+        cls.name = kwargs.get('name', {})
         # check service is supported
         if cls.service not in const.SERVICE_ACTIONS:
             critical('Given service {} is not supported'.format(cls.service))
@@ -122,7 +125,12 @@ class Validator():
             print('Valid command for the service {}'.format(cls.service))
             for k in const.SERVICE_ACTIONS[cls.service]:
                 print('\t◦ {}'.format(k))
-            sys.exit(1)
+        # if name is required for the combination of service with command
+        if cls.service in const.SERVICE_REQUIRE_NAME_WITH_COMMAND:
+            if cls.command in const.SERVICE_REQUIRE_NAME_WITH_COMMAND[cls.service]:
+                if cls.name == 'none':
+                    critical('Given service {} requires the -name flag'.format(cls.service))
+                    sys.exit(1)
 
     @classmethod
     def _valid_dir(cls, **kwargs):

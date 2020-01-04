@@ -40,7 +40,7 @@ __valid_args__ = [
 ]
 
 __optional_args__ = {
-    'key': 'name'
+    'name': ['none', 'Required for the keypair service, other is optional']
 }
 
 # Defaults
@@ -66,7 +66,8 @@ CFG_FILES = {
     'security-group': ['security_group.yaml', 'aws', 'vpc'],
     'subnet': ['none', 'aws', 'vpc'],
     'target-group': ['target_group.yaml', 'aws', 'vpc'],
-    'vpc': ['vpc.yaml', 'aws']
+    'vpc': ['vpc.yaml', 'aws'],
+    'zone': ['none', 'vpc', 'aws']
 }
 SERVICE_ACTIONS = {
     'autoscale-group': ['create', 'describe', 'modify', 'destroy'],
@@ -81,14 +82,10 @@ SERVICE_ACTIONS = {
     'security-group': ['create', 'describe', 'modify', 'destroy'],
     'subnet': ['describe'],
     'target-group': ['create', 'describe', 'modify', 'destroy'],
-    'vpc': ['create', 'describe', 'destroy']
+    'vpc': ['create', 'describe', 'destroy'],
+    'zone': ['describe'],
 }
-SERVICE_OPTIONS = {
-    'autoscale-group': {'optional': 'name'},
-    'elbv2': {'optional': 'name'},
-    'instance': {'optional': 'name'},
-    'keypair': {'optional': 'name'},
-    'launch-template': {'optional': 'name'},
-    'security-group': {'optional': 'name'},
-    'target-group': {'optional': 'name'}
+SERVICE_REQUIRE_NAME_WITH_COMMAND = {
+    'elbv2': ['create', 'destroy'],
+    'vpc': ['none']
 }

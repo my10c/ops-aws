@@ -30,6 +30,7 @@ class Region():
         """ get the available regions information """
         regions_info = self._describe_region(session=self.session)
         output = PrettyPrinter(indent=2, width=41, compact=False)
+        print('Total regions: {}'.format(len(regions_info['Regions'])))
         for k in regions_info['Regions']:
             print('\n⚬')
             output.pprint(k)

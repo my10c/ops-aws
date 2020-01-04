@@ -7,79 +7,62 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-# NOTE: Key Pair does not have EC2 resource
-
+from pprint import PrettyPrinter
 from logging import critical, warning
 
-class AwsKey():
-    """ Class to perform certain method to AWS EC2 key
+
+class KeyPair():
+    """ Class for the AWS KeyPair
     """
 
     def __init__(self, **kwargs):
         """ initial the object """
-        self.aws_conn = kwargs.get('aws_conn', {})
-        self.ec2_client = self.aws_conn['ec2_client']
-        self.key_name = kwargs.get('key_name', {})
-        self.key_value = kwargs.get('key_value', {})
+        self.cmd_cfg = kwargs.get('cmd_cfg', {})
+        self.session = kwargs.get('session', {})
+        self.tag = self.cmd_cfg['tag']
+        self.name = self.cmd_cfg['name']
+
+        # DANGER WILL ROBINSON : we using wildcard as filter!
+        if self.name == 'none' :
+            self.filter = [{}]
+        else:
+            self.filter = [{'Name' : 'key-name', 'Values' : [self.name]}]
 
     def do_cmd(self):
         """ main command handler """
-          if self.cmd_cfg['command'] == 'describe':
-              vpc_ids, vpc_info = self.describe()
-              if len(vpc_ids) == 0:
-                  print('No VPC found with the given tag, please be more speciific')
-                  return
-              if len(vpc_ids) > 1:
-                  print('Found more then on VPC with the given tag, please be more speciific!')
-              output = PrettyPrinter(indent=2, width=41, compact=False)
-              for info in vpc_info['Vpcs']:
-                  print('\n⚬ VPC ID {}'.format(info['VpcId']))
-                  output.pprint(info)
+        if self.cmd_cfg['command'] == 'describe':
+            return self.describe()
+        if self.cmd_cfg['command'] == 'create':
+            return self.create()
+        if self.cmd_cfg['command'] == 'modify':
+            return self.modify()
+        if self.cmd_cfg['command'] == 'destroy':
+            return self.destroy()
+        return False
 
-    def add(self):
-        """ add a key """
-        try:
-            key_info = self.ec2_client.import_key_pair(
-                KeyName=self.key_name,
-                PublicKeyMaterial=self.key_value
-            )
-            return key_info
-        except Exception as err:
-            critical('Unable to add key pair named {}. Error: {}'.format(self.key_name, err))
-            return None
+    def create(self):
+        """ create a KeyPair  """
 
-    def delete(self):
-        """ delete a key """
+    def describe(self):
+        """ get the keypair(s) info """
         try:
-            self.ec2_client.delete_key_pair(
-                KeyName=self.key_name,
+            keypair_session = self.session.get_client_session(service='ec2')
+            key_info = keypair_session.describe_key_pairs(
+                Filters=self.filter
             )
+            output = PrettyPrinter(indent=2, width=41, compact=False)
+            for info in key_info['KeyPairs']:
+                print('\n⚬ KeyPair ID {}'.format(info['KeyPairId']))
+                output.pprint(info)
             return True
         except Exception as err:
-            critical('Unable to delete key pair named {}. Error: {}'.format(self.key_name, err))
-            return False
-
-    def replace(self):
-        """ replace a key """
-        # we ignore the delete, since we doing a replace and the key might not exist
-        key_info = self.delete()
-        key_info = self.add()
-        if key_info is False:
+            warning('Unable to get info of the key pair named {}. Error: {}'.format(self.name, err))
             return None
-        return key_info
 
-    def get_key_info(self, **kwargs):
-        """ get the given key information """
-        key_name = kwargs.get('key_name', {})
-        if key_name:
-            search_filter = [{'Name' : 'key-name', 'Values' : [key_name]}]
-        else:
-            search_filter = [{'Name' : 'key-name', 'Values' : [self.key_name]}]
-        try:
-            key_info = self.ec2_client.describe_key_pairs(
-                Filters=search_filter
-            )
-            return key_info
-        except Exception as err:
-            warning('Unable to get info of the key pair named {}. Error: {}'.format(self.key_name, err))
-            return None
+    def modify(self):
+        """ modify the """
+        print('modify TODO')
+
+    def destroy(self):
+        """ destroy the """
+        print('destroy TODO')

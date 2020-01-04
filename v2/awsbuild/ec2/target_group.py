@@ -7,86 +7,48 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-from logging import critical
+#from pprint import PrettyPrinter
+#from logging import critical, warning
 
-class AwsTargetGroup():
-    """ Class to perform certain method to AWS security groups """
 
+class TargetGroup():
+    """ Class for the AWS Target Group
+    """
     def __init__(self, **kwargs):
         """ initial the object """
-        self.aws_conn = kwargs.get('aws_conn', {})
-        self.target_group = kwargs.get('target_group', {})
-        self.vpc_id = kwargs.get('vpc_id', {})
-        self.tag = kwargs.get('tag', {})
-        self.elbv2_client = self.aws_conn['elbv2_client']
+        self.cmd_cfg = kwargs.get('cmd_cfg', {})
+        self.session = kwargs.get('session', {})
+        self.tag = self.cmd_cfg['tag']
+
+        # DANGER WILL ROBINSON : we using wildcard as filter!
+        self.tag_filter = '*' + str(self.tag) + '*'
+        self.tag_filter = str(self.tag)
+        self.search_filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
+
+    def do_cmd(self):
+        """ main command handler """
+        if self.cmd_cfg['command'] == 'describe':
+            return self.describe()
+        if self.cmd_cfg['command'] == 'create':
+            return self.create()
+        if self.cmd_cfg['command'] == 'modify':
+            return self.modify()
+        if self.cmd_cfg['command'] == 'destroy':
+            return self.destroy()
+        return False
 
     def create(self):
-        """ function to create the target groups """
-        for target_group in self.target_group:
-            target_name = target_group
-            if 'suffix' in self.target_group[target_group]:
-                target_name += self.target_group[target_group]['suffix']
-            try:
-                if self.target_group[target_group]['protocol'] == 'TCP':
-                    _ = self.elbv2_client.create_target_group(
-                        Name=target_name,
-                        Protocol=self.target_group[target_group]['protocol'],
-                        Port=self.target_group[target_group]['port'],
-                        VpcId=self.vpc_id,
-                        HealthCheckProtocol=self.target_group[target_group]['healthcheckprotocol'],
-                        HealthCheckPort=self.target_group[target_group]['healthcheckport'],
-                        HealthCheckEnabled=self.target_group[target_group]['healthcheckenabled'],
-                        HealthCheckIntervalSeconds=self.target_group[target_group]['healthcheckintervalseconds'],
-                        HealthyThresholdCount=self.target_group[target_group]['healthythresholdcount'],
-                        UnhealthyThresholdCount=self.target_group[target_group]['unhealthythresholdcount'],
-                        TargetType=self.target_group[target_group]['targettype']
-                    )
-                else:
-                    _ = self.elbv2_client.create_target_group(
-                        Name=target_name,
-                        Protocol=self.target_group[target_group]['protocol'],
-                        Port=self.target_group[target_group]['port'],
-                        VpcId=self.vpc_id,
-                        HealthCheckProtocol=self.target_group[target_group]['healthcheckprotocol'],
-                        HealthCheckPort=self.target_group[target_group]['healthcheckport'],
-                        HealthCheckEnabled=self.target_group[target_group]['healthcheckenabled'],
-                        HealthCheckPath=self.target_group[target_group]['healthcheckpath'],
-                        HealthCheckIntervalSeconds=self.target_group[target_group]['healthcheckintervalseconds'],
-                        HealthCheckTimeoutSeconds=self.target_group[target_group]['healthchecktimeoutseconds'],
-                        HealthyThresholdCount=self.target_group[target_group]['healthythresholdcount'],
-                        UnhealthyThresholdCount=self.target_group[target_group]['unhealthythresholdcount'],
-                        Matcher={'HttpCode': self.target_group[target_group]['matcher']['httpcode']},
-                        TargetType=self.target_group[target_group]['targettype']
-                    )
-            except Exception as err:
-                critical('Unable to create the target group {}, error {}'.format(target_name, err))
-                return False
-        return True
+        """ create the target group(s) """
+        print('create TODO')
 
-    def delete(self, **kwargs):
-        """ function to delete all target groups """
-        target_arn = kwargs.get('target_arn', {})
-        target_name = kwargs.get('target_name', {})
-        try:
-            result = self.elbv2_client.delete_target_group(TargetGroupArn=target_arn)
-        except Exception as err:
-            critical('Unable to delete the target group {}, error {}'.format(target_name, err))
-            return False
-        return result['ResponseMetadata']['HTTPStatusCode']
+    def describe(self):
+        """ get the target group(s) info """
+        print('describe TODO')
 
-    def get_target_groups(self, **kwargs):
-        """ get current target groups of the VPC """
-        named_key = kwargs.get('named_key', False)
-        target_groups_info = {}
-        try:
-            target_groups = self.elbv2_client.describe_target_groups()
-        except Exception as err:
-            critical('Unable to get the target groups in vpc {}, error {}'.format(self.vpc_id, err))
-            return None
-        for target_group in target_groups['TargetGroups']:
-            if target_group['VpcId'] == self.vpc_id:
-                if named_key is True:
-                    target_groups_info[target_group['TargetGroupName']] = target_group['TargetGroupArn']
-                else:
-                    target_groups_info[target_group['TargetGroupArn']] = target_group['TargetGroupName']
-        return target_groups_info
+    def modify(self):
+        """ modify the target group(s) """
+        print('modify TODO')
+
+    def destroy(self):
+        """ destroy the target group(s) """
+        print('destroy TODO')

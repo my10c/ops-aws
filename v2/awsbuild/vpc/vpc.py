@@ -15,7 +15,7 @@ from logging import critical, warning
 
 
 class VPC():
-    """ Class the object to perform certain method in a AWS VPC
+    """ Class for the AWS VPC
     """
 
     def __init__(self, **kwargs):
@@ -34,16 +34,14 @@ class VPC():
     def do_cmd(self):
         """ main command handler """
         if self.cmd_cfg['command'] == 'describe':
-            vpc_ids, vpc_info = self.describe()
-            if len(vpc_ids) == 0:
-                print('No VPC found with the given tag, please be more speciific')
-                return
-            if len(vpc_ids) > 1:
-                print('Found more then on VPC with the given tag, please be more speciific!')
-            output = PrettyPrinter(indent=2, width=41, compact=False)
-            for info in vpc_info['Vpcs']:
-                print('\n⚬ VPC ID {}'.format(info['VpcId']))
-                output.pprint(info)
+            return self.describe()
+        if self.cmd_cfg['command'] == 'create':
+            return self.create()
+        if self.cmd_cfg['command'] == 'modify':
+            return self.modify()
+        if self.cmd_cfg['command'] == 'destroy':
+            return self.destroy()
+        return False
 
     def describe(self):
         """ get the vpc info """
@@ -57,41 +55,19 @@ class VPC():
             for k in vpc_info['Vpcs']:
                 if k['VpcId']:
                     vpc_ids.append(k['VpcId'])
-            return vpc_ids, vpc_info
         except Exception as err:
             warning('Unable to get the vpc info, error {}'.format(err))
-            return None
-
-###->     def create(self):
-###->         """ create a VPC, check if we need to setup IPv6 """
-###->         try:
-###->             self.vpc = self.ec2_resource.create_vpc(
-###->                 CidrBlock=self.cidr,
-###->                 AmazonProvidedIpv6CidrBlock=self.ipv6
-###->             )
-###->         except Exception as err:
-###->             critical('Unable to create the VPC. Error: {}'.format(err))
-###->             return None
-###->         spin_message(
-###->             message='Waiting {} seconds for the VPC to become available.'.format(WAIT_TIMER),
-###->             seconds=WAIT_TIMER
-###->         )
-###->         self.vpc_id = self.vpc.id
-###->         set_tag(obj=self.vpc, tag=self.tag)
-###->         self._set_dns_options()
-###->         return self.vpc
-###-> 
-###->     def destroy(self):
-###->         """ destroy a VPC, this requires that all component to be destroyed first:
-###->             gateways (internet and nat), instances, route tables, subnets and security groups
-###->             we need to delete/release the EIP and volumes once the VPC has been destroyed
-###->          """
-###->         try:
-###->             self.vpc.delete()
-###->             return True
-###->         except Exception as err:
-###->             critical('Unable to destroy VPCs info. Error: {}'.format(err))
-###-> 
+            return False
+        if len(vpc_ids) == 0:
+            print('No VPC found with the given tag, please be more speciific')
+            return False
+        if len(vpc_ids) > 1:
+            print('Found more then on VPC with the given tag, please be more speciific!')
+        output = PrettyPrinter(indent=2, width=41, compact=False)
+        for info in vpc_info['Vpcs']:
+            print('\n⚬ VPC ID {}'.format(info['VpcId']))
+            output.pprint(info)
+            return True
 
     def get_cidr(self):
         """ get the vpc ipv4 and ipv6 cidr from the given vpc tag """
@@ -114,7 +90,19 @@ class VPC():
         print('{}'.format(vpc_cidr))
         return vpc_cidr
 
-    def get_vpcid(self):
+    def create(self):
+        """ create the vpc  """
+        print('create TODO')
+
+    def modify(self):
+        """ create the vpc attribute  """
+        print('create TODO')
+
+    def destroy(self):
+        """ destroy the vpc """
+        print('destroy TODO')
+
+    def getid(self):
         """ get the vpc if from the given vpc tag """
         vpc_ids, _ = self.describe()
         if len(vpc_ids) != 1:
@@ -122,43 +110,3 @@ class VPC():
             print('Please be more speciific with the tag, cancelling!')
             return None
         return vpc_ids[0]
-
-###-> 
-###->     def get_main_route_table(self):
-###->         """ return the main (default) route table of the vpc """
-###->         main_route_table = []
-###->         for route_table in list(self.vpc.route_tables.all()):
-###->             for association in list(route_table.associations):
-###->                 if association.main is True:
-###->                     main_route_table.append(route_table)
-###->         if len(main_route_table) != 1:
-###->             critical('cannot get main route table! {}'.format(main_route_table))
-###->             return None
-###->         return main_route_table[0]
-###-> 
-###->     def set_vpc_resource(self, **kwargs):
-###->         """ set the vpc object """
-###->         vpc_id = kwargs.get('vpc_id', {})
-###->         try:
-###->             self.vpc = self.ec2_resource.Vpc(vpc_id)
-###->             return True
-###->         except Exception as err:
-###->             critical('Unable to get the vpc resource with id {}, error {}'.format(self.vpc_id, err))
-###->             return False
-###-> 
-###->     def  _set_dns_options(self):
-###->         """ set the vpc dns options """
-###->         # ignore if failes
-###->         # we need to modify the DNS options one at the time!
-###->         try:
-###->             self.vpc.modify_attribute(
-###->                 EnableDnsSupport={'Value': True}
-###->             )
-###->         except Exception as err:
-###->             warning('Unable to set DNS support, error {}'.format(err))
-###->         try:
-###->             self.vpc.modify_attribute(
-###->                 EnableDnsHostnames={'Value': True}
-###->             )
-###->         except Exception as err:
-###->             warning('Unable to set DNS hostnames, error {}'.format(err))

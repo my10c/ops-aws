@@ -11,8 +11,8 @@
 #from logging import critical, warning
 
 
-class AutoscaleGroup():
-    """ Class for the AWS Autoscale Group
+class Subnet():
+    """ Class for the AWS Subnet
     """
 
     def __init__(self, **kwargs):
@@ -39,17 +39,17 @@ class AutoscaleGroup():
         return False
 
     def create(self):
-        """ create autoscale group(s)  """
+        """ create a subnet in the vpc  """
         print('create TODO')
 
     def describe(self):
-        """ get the autoscale group(s) info """
+        """ get the subnets info in the vpc"""
         print('describe TODO')
 
     def modify(self):
-        """ modify the autoscale group(s) """
+        """ modify a subnet in the vpc """
         print('modify TODO')
 
     def destroy(self):
-        """ destroy the autoscale group(s) """
+        """ destroy a subnet in the vpc"""
         print('destroy TODO')
