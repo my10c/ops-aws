@@ -7,8 +7,6 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-# NOTE: Region does not have EC2 resource
-
 from logging import warning
 from pprint import PrettyPrinter
 
@@ -49,8 +47,12 @@ class Zone():
 
     def available_zones(self):
         """ get the given zones information """
+        available_zones = 0
         zones_info = self._describe_zone(session=self.session)
-        return len(zones_info['AvailabilityZones'])
+        for k in zones_info['AvailabilityZones']:
+            if zones_info['AvailabilityZones'][k]['State'] == 'available':
+                available_zones += 1
+        return available_zones
 
     @classmethod
     def _describe_zone(cls, **kwargs):

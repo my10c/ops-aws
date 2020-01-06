@@ -1,5 +1,5 @@
 ---
 
-# change to your keynames
+# to generate : ssh-keygen -t rsa -b 4096 -P '' -f <file-name> -C 'Some comment>
 awsbuild-dev:
    pubkey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCYrBPbVEyjR9EG8H3dNIab6DpWWNLwSfUvUj/ySu1SH8fDGkR79Dq6cAty7SQOx2T9sKcsIpSv+fUvx8zaqho98icfD0NSDN8ZlSqbqyBfwTfVW6ihKHmGCj2d+14s15NEHGNUsfMn8imnplQhkIm3xRRB0AOAajcv53oe5VoJJvoWMIKenwT+HbkkpiMnGNJTXiX6QSn0+OnIPJx+VMmCAI5eGkv7IpYfM1he1YqdPbYDT1tbdFDd69/g2K4SUa5LbNvm3I6YBVz4nVCETtjA+Juq+IEjyR/gnHL3iVwfLnPvYpQHet+cfAGEn7p+qJZ7NAcdn1Ie5oxjLZLX8aJDrRnQh8QQKk3mLxFbimDPaxPJHJ0P0VJzPUhP0rwoFtwdvY7DrYftgrKMibFILuwSGvyVlhufPMi1oMsI+qVfGF2CNuJT2HSyxMbgYID8EbXqpjga0JvV4ANQcKsq53nHCH8upuRYogQpFinwF9vvH2qFb0b0eDBWvfoAnxGwAh5U/2bMiD6/Zti9kOd//w3TxS0JsY3q/qxIE+/R6fh3U4c59yqMw2EyRHWQkiJkp0yo9To/YXYSVffaKcPqGVrftpB8Zb7kGVswhgRlWGm3ed7auF3sRhfRHNYx3rCxFwDrkwUNuz7T7K/xQeqehX8C64xpGRvYoFB9WO35KplNow== Key for AWSBuild Dev'
