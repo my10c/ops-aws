@@ -21,8 +21,7 @@ class KeyPair():
         self.session = kwargs.get('session', {})
         self.tag = self.cmd_cfg['tag']
         self.name = self.cmd_cfg['name']
-
-        # DANGER WILL ROBINSON : we using wildcard as filter!
+        # set filter, requires exact name
         if self.name == '':
             self.filter = [{}]
         else:
@@ -61,6 +60,9 @@ class KeyPair():
             key_info = keypair_session.describe_key_pairs(
                 Filters=self.filter
             )
+            if len(key_info['KeyPairs']) == 0:
+                print('\n⚬ No keypair found, filter {}'.format(self.filter))
+                return True
             output = PrettyPrinter(indent=2, width=41, compact=False)
             for info in key_info['KeyPairs']:
                 print('\n⚬ KeyPair ID {}'.format(info['KeyPairId']))

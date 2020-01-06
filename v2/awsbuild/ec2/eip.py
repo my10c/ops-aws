@@ -7,8 +7,8 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-#from pprint import PrettyPrinter
-#from logging import critical, warning
+from pprint import PrettyPrinter
+from logging import critical, warning
 
 
 class EIP():
@@ -22,9 +22,8 @@ class EIP():
         self.tag = self.cmd_cfg['tag']
 
         # DANGER WILL ROBINSON : we using wildcard as filter!
-        self.tag_filter = '*' + str(self.tag) + '*'
-        self.tag_filter = str(self.tag)
-        self.search_filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
+        self.tag_filter = str('*' + self.tag + '*')
+        self.filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
 
     def do_cmd(self):
         """ main command handler """
@@ -44,7 +43,22 @@ class EIP():
 
     def describe(self):
         """ get the eip(s) info """
-        print('describe TODO')
+        try:
+            eip_session = self.session.get_client_session(service='ec2')
+            eip_info = eip_session.describe_addresses(
+                Filters=self.filter
+            )
+            if len(eip_info['Addresses']) == 0:
+                print('\n⚬ No EIP found, filter {}'.format(self.filter))
+                return True
+            output = PrettyPrinter(indent=2, width=41, compact=False)
+            for info in eip_info['Addresses']:
+                print('\n⚬ EIP ID {}'.format(info['AllocationId']))
+                output.pprint(info)
+            return True
+        except Exception as err:
+            warning('Unable to get info EIP. Error: {}'.format(err))
+            return None
 
     def modify(self):
         """ modify the eip(s)"""

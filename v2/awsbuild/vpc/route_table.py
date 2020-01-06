@@ -21,9 +21,8 @@ class RouteTable():
         self.tag = self.cmd_cfg['tag']
 
         # DANGER WILL ROBINSON : we using wildcard as filter!
-        self.tag_filter = '*' + str(self.tag) + '*'
-        self.tag_filter = str(self.tag)
-        self.search_filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
+        self.tag_filter = str('*' + self.tag + '*')
+        self.filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
 
     def do_cmd(self):
         """ main command handler """
@@ -43,7 +42,21 @@ class RouteTable():
 
     def describe(self):
         """ get the route table(s) info in the vpc"""
+#        try:
+#            nat_gate_session = self.session.get_client_session(service='ec2')
+#            nat_gate_info = nat_gate_session.describe_nat_gateways(
+#                Filters=self.filter
+#            )
+#            output = PrettyPrinter(indent=2, width=41, compact=False)
+#            for info in nat_gate_info['NatGateways']:
+#                print('\n⚬ NAT Gateway ID {}'.format(info['NatGatewayId']))
+#                output.pprint(info)
+#            return True
+#        except Exception as err:
+#            warning('Unable to get info of the NAT gateway pair named {}. Error: {}'.format(self.name, err))
+#            return None
         print('describe TODO')
+
 
     def modify(self):
         """ modify a route table in the vpc """

@@ -18,6 +18,7 @@ from awsbuild.misc.validator import Validator
 from awsbuild.connector.connector import Connector
 from awsbuild.ec2.autoscale_group import AutoscaleGroup
 from awsbuild.ec2.elbv2 import ELBV2
+from awsbuild.ec2.eip import EIP
 from awsbuild.vpc.internet_gateway import InternetGateway
 from awsbuild.ec2.instance  import Instance
 from awsbuild.ec2.keypair import KeyPair
@@ -35,14 +36,15 @@ from awsbuild.misc.spinner import dot_message
 SERVICE_TO_CALL_MAP = {
     'autoscale_group': AutoscaleGroup,
     'elbv2': ELBV2,
-    'internet_gateway': InternetGateway,
+    'eip': EIP,
+    'internet-gateway': InternetGateway,
     'instance': Instance,
     'keypair': KeyPair,
-    'launch_template': LaunchTemplate,
-    'nat_gateway': NATGateway,
+    'launch-template': LaunchTemplate,
+    'nat-gateway': NATGateway,
     'region': Region,
     'route_table': RouteTable,
-    'security_group': SecurityGroup,
+    'security-group': SecurityGroup,
     'subnet': Subnet,
     'target-group': TargetGroup,
     'vpc': VPC,

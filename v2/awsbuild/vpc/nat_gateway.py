@@ -7,8 +7,8 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-#from pprint import PrettyPrinter
-#from logging import critical, warning
+from pprint import PrettyPrinter
+from logging import critical, warning
 
 
 class NATGateway():
@@ -20,11 +20,11 @@ class NATGateway():
         self.cmd_cfg = kwargs.get('cmd_cfg', {})
         self.session = kwargs.get('session', {})
         self.tag = self.cmd_cfg['tag']
+        self.name = self.cmd_cfg['name']
 
         # DANGER WILL ROBINSON : we using wildcard as filter!
-        self.tag_filter = '*' + str(self.tag) + '*'
-        self.tag_filter = str(self.tag)
-        self.search_filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
+        self.tag_filter = str('*' + self.tag + '*')
+        self.filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
 
     def do_cmd(self):
         """ main command handler """
@@ -44,7 +44,23 @@ class NATGateway():
 
     def describe(self):
         """ get the NAT gateway(s) info in the vpc """
-        print('describe TODO')
+        try:
+            nat_gate_session = self.session.get_client_session(service='ec2')
+            nat_gate_info = nat_gate_session.describe_nat_gateways(
+                Filters=self.filter
+            )
+            if len(nat_gate_info['NatGateways']) == 0:
+                print('\n⚬ No NAT Gateway found, filter {}'.format(self.filter))
+                return True
+            output = PrettyPrinter(indent=2, width=41, compact=False)
+            for info in nat_gate_info['NatGateways']:
+                print('\n⚬ NAT Gateway ID {}'.format(info['NatGatewayId']))
+                output.pprint(info)
+            return True
+        except Exception as err:
+            warning('Unable to get info of the NAT gateway(s), filter {}. Error: {}'.\
+                format(self.filter, err))
+            return None
 
     def modify(self):
         """ modify the NAT gateway """

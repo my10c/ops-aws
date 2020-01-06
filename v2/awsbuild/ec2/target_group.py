@@ -21,9 +21,8 @@ class TargetGroup():
         self.tag = self.cmd_cfg['tag']
 
         # DANGER WILL ROBINSON : we using wildcard as filter!
-        self.tag_filter = '*' + str(self.tag) + '*'
-        self.tag_filter = str(self.tag)
-        self.search_filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
+        self.tag_filter = str('*' + self.tag + '*')
+        self.filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
 
     def do_cmd(self):
         """ main command handler """

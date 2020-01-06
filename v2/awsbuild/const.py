@@ -56,6 +56,7 @@ CFG_FILES = {
     'aws': ['aws.yaml'],
     'autoscale-group': ['autoscale_group.yaml', 'aws', 'vpc'],
     'elbv2': ['elbv2.yaml', 'aws', 'vpc'],
+    'eip': ['none', 'vpc', 'aws'],
     'internet-gateway': ['none', 'vpc', 'aws'],
     'instances': ['instances.yaml', 'aws', 'vpc'],
     'keypair': ['keypair.yaml', 'aws', 'vpc'],
@@ -72,6 +73,7 @@ CFG_FILES = {
 SERVICE_ACTIONS = {
     'autoscale-group': ['create', 'describe', 'modify', 'destroy'],
     'elbv2': ['create', 'describe', 'modify', 'destroy'],
+    'eip': ['describe'],
     'internet-gateway': ['describe'],
     'instance': ['create', 'describe', 'start', 'stop', 'destroy'],
     'keypair': ['create', 'describe', 'destroy'],

@@ -27,9 +27,8 @@ class VPC():
         self.tag = self.cmd_cfg['tag']
 
         # DANGER WILL ROBINSON : we using wildcard as filter!
-        self.tag_filter = '*' + str(self.tag) + '*'
-        self.tag_filter = str(self.tag)
-        self.search_filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
+        self.tag_filter = str('*' + self.tag + '*')
+        self.filter = [{'Name' : 'tag:Name', 'Values' : [self.tag_filter]}]
 
     def do_cmd(self):
         """ main command handler """
@@ -49,7 +48,7 @@ class VPC():
         try:
             vpc_session = self.session.get_client_session(service='ec2')
             vpc_info = vpc_session.describe_vpcs(
-                Filters=self.search_filter
+                Filters=self.filter
             )
             vpc_ids = []
             for k in vpc_info['Vpcs']:
