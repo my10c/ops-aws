@@ -59,8 +59,11 @@ class Validator():
     def is_valid(self):
         """ validate arguments and configuration files
         """
-        self._valid_service_command_name(service=self.service,\
+        check_valid_name = self._valid_service_command_name(service=self.service,\
             command=self.command, name=self.name)
+        if check_valid_name == 1:
+            self._valid_name_in_config(name=self.name,\
+                fqpn=self.configdir + '/' + const.CFG_FILES[self.service][0])
         self._valid_region(region=self.region,\
             fqpn=self.configdir + '/' + const.CFG_FILES['vpc'][0])
         services = self._get_service_dependancy(service=self.service)
@@ -125,12 +128,33 @@ class Validator():
             print('Valid command for the service {}'.format(cls.service))
             for k in const.SERVICE_ACTIONS[cls.service]:
                 print('\t◦ {}'.format(k))
+            sys.exit(1)
         # if name is required for the combination of service with command
         if cls.service in const.SERVICE_REQUIRE_NAME_WITH_COMMAND:
             if cls.command in const.SERVICE_REQUIRE_NAME_WITH_COMMAND[cls.service]:
-                if cls.name == 'none':
+                if cls.name == '':
                     critical('Given service {} requires the -name flag'.format(cls.service))
                     sys.exit(1)
+                return 1
+        return 0
+
+    @classmethod
+    def _valid_name_in_config(cls, **kwargs):
+        """ check given name exist in config """
+        cls.name = kwargs.get('name', {})
+        cls.fqpn = kwargs.get('fqpn', {})
+        try:
+            yaml_file = open(cls.fqpn, 'r')
+            with yaml_file as ymlfile:
+                config_data = yaml.safe_load(ymlfile)
+        except Exception as err:
+            critical('Could not open the file or yaml format issue {}. Error: {}'.\
+               format(cls.fqpn, err))
+            sys.exit(1)
+        if cls.name not in config_data:
+            critical('Given name  {} was not found in the configurtion file, aborting'.\
+               format(cls.name))
+            sys.exit(1)
 
     @classmethod
     def _valid_dir(cls, **kwargs):

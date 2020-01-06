@@ -40,7 +40,7 @@ __valid_args__ = [
 ]
 
 __optional_args__ = {
-    'name': ['none', 'Required for the keypair service, other is optional']
+    'name': ['', 'Required for the keypair service, other is optional']
 }
 
 # Defaults
@@ -87,5 +87,6 @@ SERVICE_ACTIONS = {
 }
 SERVICE_REQUIRE_NAME_WITH_COMMAND = {
     'elbv2': ['create', 'destroy'],
+    'keypair': ['create', 'modify', 'destroy'],
     'vpc': ['none']
 }

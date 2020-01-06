@@ -23,7 +23,7 @@ class KeyPair():
         self.name = self.cmd_cfg['name']
 
         # DANGER WILL ROBINSON : we using wildcard as filter!
-        if self.name == 'none' :
+        if self.name == '':
             self.filter = [{}]
         else:
             self.filter = [{'Name' : 'key-name', 'Values' : [self.name]}]
@@ -41,7 +41,18 @@ class KeyPair():
         return False
 
     def create(self):
-        """ create a KeyPair  """
+        """ create a keypair """
+        try:
+            keypair_session = self.session.get_client_session(service='ec2')
+            key_info = keypair_session.import_key_pair(
+                KeyName=self.name,
+                PublicKeyMaterial=self.cmd_cfg['settings']['keypair'][self.name]['pubkey']
+            )
+            print('New create keypar: {}'.format(key_info))
+            return True
+        except Exception as err:
+            critical('Unable to add keypair {}. Error: {}'.format(self.name, err))
+            return False
 
     def describe(self):
         """ get the keypair(s) info """
@@ -60,9 +71,19 @@ class KeyPair():
             return None
 
     def modify(self):
-        """ modify the """
-        print('modify TODO')
+        """ modify a keypair """
+        self.destroy()
+        self.create()
 
     def destroy(self):
-        """ destroy the """
-        print('destroy TODO')
+        """ destroy a keypair """
+        try:
+            keypair_session = self.session.get_client_session(service='ec2')
+            keypair_session.delete_key_pair(
+                KeyName=self.name
+            )
+            print('Keypair {} destroyed.'.format(self.name))
+            return True
+        except Exception as err:
+            critical('Unable to destroy keypair {}. Error: {}'.format(self.name, err))
+            return False
