@@ -53,6 +53,14 @@ class Subnet():
             print('\n⚬ Subnet ID {}'.format(info['SubnetId']))
             output.pprint(info)
 
+    def get_info(self):
+        """ get the subnets info in the vpc"""
+        subnet_info = self.__get_info(session=self.session,\
+            filters=self.filter)
+        if len(subnet_info['Subnets']) == 0:
+            return None
+        return subnet_info
+
     def modify(self):
         """ modify a subnet in the vpc """
         print('modify TODO')

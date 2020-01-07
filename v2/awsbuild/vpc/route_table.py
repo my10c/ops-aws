@@ -7,8 +7,8 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-#from pprint import PrettyPrinter
-#from logging import critical, warning
+from pprint import PrettyPrinter
+from logging import critical, warning
 
 
 class RouteTable():
@@ -42,21 +42,23 @@ class RouteTable():
 
     def describe(self):
         """ get the route table(s) info in the vpc"""
-#        try:
-#            nat_gate_session = self.session.get_client_session(service='ec2')
-#            nat_gate_info = nat_gate_session.describe_nat_gateways(
-#                Filters=self.filter
-#            )
-#            output = PrettyPrinter(indent=2, width=41, compact=False)
-#            for info in nat_gate_info['NatGateways']:
-#                print('\n⚬ NAT Gateway ID {}'.format(info['NatGatewayId']))
-#                output.pprint(info)
-#            return True
-#        except Exception as err:
-#            warning('Unable to get info of the NAT gateway pair named {}. Error: {}'.format(self.name, err))
-#            return None
-        print('describe TODO')
+        route_table_info = self.__get_info(session=self.session,\
+              filters=self.filter)
+        if len(route_table_info['RouteTables']) == 0:
+            print('\n⚬ No Route table found, filter {}'.format(self.filter))
+            return
+        output = PrettyPrinter(indent=2, width=41, compact=False)
+        for info in route_table_info['RouteTables']:
+            print('\n⚬ Route table Gateway ID {}'.format(info['RouteTableId']))
+            output.pprint(info)
 
+    def get_info(self):
+        """ get the internet gateway(s) info in the vpc """
+        route_table_info = self.__get_info(session=self.session,\
+              filters=self.filter)
+        if len(route_table_info['RouteTables']) == 0:
+            return None
+        return route_table_info
 
     def modify(self):
         """ modify a route table in the vpc """
@@ -65,3 +67,19 @@ class RouteTable():
     def destroy(self):
         """ destroy a route table in the vpc"""
         print('destroy TODO')
+
+    @classmethod
+    def __get_info(cls, **kwargs):
+        """ get info """
+        cls.session = kwargs.get('session', {})
+        cls.filters = kwargs.get('filters', {})
+        try:
+            cls.route_table_session = cls.session.get_client_session(service='ec2')
+            route_table_info = cls.route_table_session.describe_route_tables(
+                Filters=cls.filters
+            )
+            return route_table_info
+        except Exception as err:
+            warning('Unable to get info of the route table  filter {}. Error: {}'.\
+                  format(cls.filters, err))
+            return None

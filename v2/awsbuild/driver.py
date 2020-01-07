@@ -43,7 +43,7 @@ SERVICE_TO_CALL_MAP = {
     'launch-template': LaunchTemplate,
     'nat-gateway': NATGateway,
     'region': Region,
-    'route_table': RouteTable,
+    'route-table': RouteTable,
     'security-group': SecurityGroup,
     'subnet': Subnet,
     'target-group': TargetGroup,
