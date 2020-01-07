@@ -15,7 +15,7 @@ class SpinCursor(threading.Thread):
     """ Class and function so display a wait spinner (dots or wheel)
     """
 
-    def __init__(self, msg=None, maxspin=0, minspin=10, speed=5, dots=False):
+    def __init__(self, msg=None, maxspin=0, minspin=10, speed=5, mode=None):
         # Count of a spin
         self.count = 0
         self.out = sys.stdout
@@ -28,11 +28,12 @@ class SpinCursor(threading.Thread):
         self.string = None
         # Speed is given as number of spins a second
         # Use it to calculate spin wait time
-        self.waittime = 1.0/float(speed*4)
-        if dots is True:
+        self.waittime = 1.0/float(speed*10)
+        if mode == 'dots':
             self.spinchars = (u'◦ ', u'○ ', u'◎ ', u'◉ ')
-        else:
-            #self.spinchars = (u'9 ', u'8 ', u'7 ', u'6 ', u'5 ', u'4 ', u'3 ', u'2 ', u'1 ', u'0 ')
+        if mode == 'count-down':
+            self.spinchars = (u'9 ', u'8 ', u'7 ', u'6 ', u'5 ', u'4 ', u'3 ', u'2 ', u'1 ', u'0 ')
+        if mode == 'wheel':
             self.spinchars = (u'-', u'\\ ', u'| ', u'/ ')
         threading.Thread.__init__(self, None, None, "Spin Thread")
 
@@ -63,14 +64,21 @@ class SpinCursor(threading.Thread):
 
 def spin_message(message=None, seconds=None):
     """ print the given message and wait for the given seconds """
-    spin = SpinCursor(msg=message, minspin=seconds, speed=1)
+    spin = SpinCursor(msg=message, minspin=seconds, speed=1, mode='wheel')
     spin.start()
     sleep(seconds)
     spin.stop()
 
 def dot_message(message=None, seconds=None):
     """ fucntion to print dot while sleeping for the given seconds. """
-    spin = SpinCursor(msg=message, minspin=seconds, speed=1, dots=True)
+    spin = SpinCursor(msg=message, minspin=seconds, speed=1, mode='dots')
+    spin.start()
+    sleep(seconds)
+    spin.stop()
+
+def count_down_message(message=None, seconds=None):
+    """ print the given message and wait for the given seconds """
+    spin = SpinCursor(msg=message, minspin=seconds, speed=1, mode='count-down')
     spin.start()
     sleep(seconds)
     spin.stop()

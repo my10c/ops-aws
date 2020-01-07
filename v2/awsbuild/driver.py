@@ -31,7 +31,7 @@ from awsbuild.vpc.subnet import Subnet
 from awsbuild.ec2.target_group import TargetGroup
 from awsbuild.vpc.vpc import VPC
 from awsbuild.aws.zone import Zone
-from awsbuild.misc.spinner import dot_message
+from awsbuild.misc.spinner import dot_message, count_down_message
 
 SERVICE_TO_CALL_MAP = {
     'autoscale_group': AutoscaleGroup,
@@ -79,6 +79,7 @@ def main():
     args = parser.parse_args()
 
     # setup logging
+    count_down_message(message='Setting up logs', seconds=3)
     log_formatter = logging.Formatter("%(asctime)s %(filename)s %(name)s %(levelname)s %(message)s")
     root_logger = logging.getLogger()
     file_handler = logging.FileHandler(const.LOCATION['log_file'])
@@ -89,15 +90,15 @@ def main():
     root_logger.addHandler(console_handler)
 
     # validate the given argument and the nessecary configuration files
+    dot_message(message='Validating all configuration and given argument', seconds=4)
     validator = Validator(given_arg=vars(args))
     _ = validator.is_valid()
     cmd_cfg = validator.get_valid()
-    dot_message(message='All configuration and given argument validated', seconds=5)
 
     # create an AWS session connector
+    dot_message(message='Creating an AWS session', seconds=4)
     session = Connector(aws=cmd_cfg['settings']['aws']['credentials'],\
         region=cmd_cfg['settings']['vpc']['region'])
-    dot_message(message='AWS session created', seconds=5)
 
     #  create class and then call the common name do_cmd
     service_name = SERVICE_TO_CALL_MAP[cmd_cfg['service']]
