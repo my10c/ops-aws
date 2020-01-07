@@ -7,8 +7,6 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-# NOTE: Region does not have EC2 resource
-
 from logging import warning
 from pprint import PrettyPrinter
 

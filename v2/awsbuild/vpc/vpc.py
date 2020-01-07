@@ -45,33 +45,33 @@ class VPC():
     def describe(self):
         """ get the vpc info """
         # we assume there is only 1 vpc with the set tag
-        try:
-            vpc_session = self.session.get_client_session(service='ec2')
-            vpc_info = vpc_session.describe_vpcs(
-                Filters=self.filter
-            )
-            vpc_ids = []
-            for k in vpc_info['Vpcs']:
-                if k['VpcId']:
-                    vpc_ids.append(k['VpcId'])
-        except Exception as err:
-            warning('Unable to get the vpc info, error {}'.format(err))
-            return False
-        if len(vpc_ids) == 0:
+        vpc_info = self.__get_info(session=self.session,\
+            filters=self.filter)
+        if len(vpc_info['Vpcs']) == 0:
             print('No VPC found with the given tag, please be more speciific')
             return False
-        if len(vpc_ids) > 1:
-            print('Found more then on VPC with the given tag, please be more speciific!')
+        if len(vpc_info['Vpcs']) > 1:
+            print('Found more then on VPC with the given tag, please be more speciific')
         output = PrettyPrinter(indent=2, width=41, compact=False)
         for info in vpc_info['Vpcs']:
             print('\n⚬ VPC ID {}'.format(info['VpcId']))
             output.pprint(info)
             return True
 
+    def get_info(self):
+        """ get the vpc info """
+        # we assume there is only 1 vpc with the set tag
+        vpc_info = self.__get_info(session=self.session,\
+            filters=self.filter)
+        if len(vpc_info['Vpcs']) == 0:
+            return None
+        return vpc_info
+
     def get_cidr(self):
         """ get the vpc ipv4 and ipv6 cidr from the given vpc tag """
-        vpc_ids, vpc_info = self.describe()
-        if len(vpc_ids) != 1:
+        vpc_info = self.__get_info(session=self.session,\
+            filters=self.filter)
+        if len(vpc_info['Vpcs']) != 1:
             print('Error, either not found or found more then one VPC with the given tag')
             print('Please be more speciific with the tag, cancelling!')
             return None
@@ -109,3 +109,19 @@ class VPC():
             print('Please be more speciific with the tag, cancelling!')
             return None
         return vpc_ids[0]
+
+    @classmethod
+    def __get_info(cls, **kwargs):
+        """ get vpc info """
+        cls.session = kwargs.get('session', {})
+        cls.filters = kwargs.get('filters', {})
+        try:
+            cls.vpc_session = cls.session.get_client_session(service='ec2')
+            vpc_info = cls.vpc_session.describe_vpcs(
+                Filters=cls.filters
+            )
+            return vpc_info
+        except Exception as err:
+            warning('Unable to get the vpc info, filter {}. error {}'.\
+                format(cls.filters, err))
+            return None

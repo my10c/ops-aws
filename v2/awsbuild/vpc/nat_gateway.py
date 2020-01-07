@@ -44,23 +44,23 @@ class NATGateway():
 
     def describe(self):
         """ get the NAT gateway(s) info in the vpc """
-        try:
-            nat_gate_session = self.session.get_client_session(service='ec2')
-            nat_gate_info = nat_gate_session.describe_nat_gateways(
-                Filters=self.filter
-            )
-            if len(nat_gate_info['NatGateways']) == 0:
-                print('\n⚬ No NAT Gateway found, filter {}'.format(self.filter))
-                return True
-            output = PrettyPrinter(indent=2, width=41, compact=False)
-            for info in nat_gate_info['NatGateways']:
-                print('\n⚬ NAT Gateway ID {}'.format(info['NatGatewayId']))
-                output.pprint(info)
-            return True
-        except Exception as err:
-            warning('Unable to get info of the NAT gateway(s), filter {}. Error: {}'.\
-                format(self.filter, err))
+        nat_gate_info = self.__get_info(session=self.session,\
+            filters=self.filter)
+        if len(nat_gate_info['NatGateways']) == 0:
+            print('\n⚬ No NAT Gateway found, filter {}'.format(self.filter))
+            return
+        output = PrettyPrinter(indent=2, width=41, compact=False)
+        for info in nat_gate_info['NatGateways']:
+            print('\n⚬ NAT Gateway ID {}'.format(info['NatGatewayId']))
+            output.pprint(info)
+
+    def get_info(self):
+        """ get the internet gateway(s) info in the vpc """
+        nat_gate_info = self.__get_info(session=self.session,\
+            filters=self.filter)
+        if len(nat_gate_info['NatGateways']) == 0:
             return None
+        return nat_gate_info
 
     def modify(self):
         """ modify the NAT gateway """
@@ -69,3 +69,19 @@ class NATGateway():
     def destroy(self):
         """ destroy the NAT gateway """
         print('destroy TODO')
+
+    @classmethod
+    def __get_info(cls, **kwargs):
+        """ get info """
+        cls.session = kwargs.get('session', {})
+        cls.filters = kwargs.get('filters', {})
+        try:
+            cls.nat_gate_session = cls.session.get_client_session(service='ec2')
+            nat_gate_info = cls.nat_gate_session.describe_internet_gateways(
+                Filters=cls.filters
+            )
+            return nat_gate_info
+        except Exception as err:
+            warning('Unable to get info of the Internet gateway(s), filter {}. Error: {}'.\
+                format(cls.filters, err))
+            return None
