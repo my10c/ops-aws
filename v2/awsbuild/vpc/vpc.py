@@ -9,10 +9,6 @@
 
 from pprint import PrettyPrinter
 from logging import critical, warning
-#from bao_const import WAIT_TIMER
-#from bao_spinner import spin_message
-#from bao_set_tag import set_tag
-
 
 class VPC():
     """ Class for the AWS VPC

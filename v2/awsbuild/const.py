@@ -92,3 +92,6 @@ SERVICE_REQUIRE_NAME_WITH_COMMAND = {
     'keypair': ['create', 'modify', 'destroy'],
     'vpc': ['none']
 }
+
+MIN_CIDR_V4 = 21
+MIN_CIDR_V6 = 56
