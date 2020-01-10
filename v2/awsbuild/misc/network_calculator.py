@@ -72,12 +72,12 @@ class NetworkCalc():
             suffix = '_ipv6'
         subnet_info = {}
         try:
+            # devide to 2 equal size cidr
+            subnets = list(ipaddress.ip_network(network + cidr).subnets(prefixlen_diff=1))
+            subnet_info['fe_subnet' + suffix] = str(subnets[0])
+            subnet_info['be_subnet' + suffix] = str(subnets[1])
             # IPv4
             if not ipv6:
-                # devide to 2 equal size cidr
-                subnets = list(ipaddress.ip_network(network + cidr).subnets(prefixlen_diff=2))
-                subnet_info['fe_subnet' + suffix] = str(subnets[0])
-                subnet_info['be_subnet' + suffix] = str(subnets[1])
                 cnt = 1
                 for subnet in list(ipaddress.ip_network(str(subnets[0])).subnets(prefixlen_diff=2)):
                     subnet_info['fe_subnet' + suffix + '_' + str(cnt)] = str(subnet)
@@ -98,8 +98,6 @@ class NetworkCalc():
                 subnets = list(ipaddress.ip_network(network + cidr).subnets(new_prefix=64))
                 start = int(ipv6_64s/2)
                 end = int(start + 4)
-                subnet_info['fe_subnet' + suffix] = str(subnets[0])
-                subnet_info['be_subnet' + suffix] = str(subnets[start])
                 # fe takes the 4 subnets at the begining of the subnets list
                 cnt = 1
                 for subnet in subnets[:4]:
