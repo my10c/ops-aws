@@ -67,18 +67,17 @@ class NetworkCalc():
         ipv6 = kwargs.get('ipv6', False)
         if not cidr.lstrip().startswith('/'):
             cidr = '/' + cidr
-        network_cidr = network + cidr
         suffix = '_ipv4'
         if ipv6:
             suffix = '_ipv6'
         subnet_info = {}
         try:
-            # devide to 2 equal size cidrs
-            subnets = list(ipaddress.ip_network(network_cidr).subnets(prefixlen_diff=1))
-            subnet_info['fe_subnet' + suffix] = str(subnets[0])
-            subnet_info['be_subnet' + suffix] = str(subnets[1])
             # IPv4
             if not ipv6:
+                # devide to 2 equal size cidr
+                subnets = list(ipaddress.ip_network(network + cidr).subnets(prefixlen_diff=2))
+                subnet_info['fe_subnet' + suffix] = str(subnets[0])
+                subnet_info['be_subnet' + suffix] = str(subnets[1])
                 cnt = 1
                 for subnet in list(ipaddress.ip_network(str(subnets[0])).subnets(prefixlen_diff=2)):
                     subnet_info['fe_subnet' + suffix + '_' + str(cnt)] = str(subnet)
@@ -87,18 +86,26 @@ class NetworkCalc():
                 for subnet in list(ipaddress.ip_network(str(subnets[1])).subnets(prefixlen_diff=2)):
                     subnet_info['be_subnet' + suffix + '_' + str(cnt)] = str(subnet)
                     cnt += 1
-            # IPv6
             else:
-                # IPv6 must be /64! and we always getting a /56 from AWS
-                subnets = list(ipaddress.ip_network(network_cidr).subnets(prefixlen_diff=8))
-                # fe takes the first half 4 from the /64s : 0 -> 3
+                # IPv6 subnets must be /64! and we always getting a /56 from AWS
+                # a IPv6 /64 = 2^64
+                ipv6_64s = int(ipaddress.ip_network(network + cidr).num_addresses / (2 **64))
+                # we need at least 8x/64s == /61 but no more then 256x/64 == /56
+                if (ipv6_64s < 8) or (ipv6_64s > 256):
+                    critical('Cidr {} not supported'.format(cidr))
+                    return None
+                # get all /64s
+                subnets = list(ipaddress.ip_network(network + cidr).subnets(new_prefix=64))
+                start = int(ipv6_64s/2)
+                end = int(start + 4)
+                subnet_info['fe_subnet' + suffix] = str(subnets[0])
+                subnet_info['be_subnet' + suffix] = str(subnets[start])
+                # fe takes the 4 subnets at the begining of the subnets list
                 cnt = 1
                 for subnet in subnets[:4]:
                     subnet_info['fe_subnet' + suffix + '_' + str(cnt)] = str(subnet)
                     cnt += 1
-                # be takes the second half 4 from the /64s : example 128 -> 131 if /56
-                start = int(len(subnets)/2)
-                end = start + 4
+                # be takes the 4 subnets at the middle of the subnets list
                 cnt = 1
                 for subnet in subnets[start:end]:
                     subnet_info['be_subnet' + suffix + '_' + str(cnt)] = str(subnet)
