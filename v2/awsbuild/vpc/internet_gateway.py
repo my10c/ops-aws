@@ -9,6 +9,10 @@
 
 from pprint import PrettyPrinter
 from logging import critical, warning
+import awsbuild.const as const
+from awsbuild.misc.spinner import spin_message
+from awsbuild.aws.tag import create_resource_id_tag as set_tag
+
 
 
 class InternetGateway():
@@ -40,7 +44,20 @@ class InternetGateway():
 
     def create(self):
         """ create a internet gateway  """
-        print('create TODO')
+        try:
+            int_gate_session = self.session.get_client_session(service='ec2')
+            obj_int_gate = int_gate_session.create_internet_gateway()
+            spin_message(
+                message='Waiting {} seconds for the internet gateway to become available'.\
+                    format(const.TIMER),
+                seconds=const.TIMER
+            )
+            set_tag(session=int_gate_session, resource_id=obj_int_gate.id,\
+                tag_name='Name', tag_value=self.tag)
+            return obj_int_gate.id
+        except Exception as err:
+            critical('Unable to create the internet gateway, error {}'.format(err))
+            return None
 
     def describe(self):
         """ get the internet gateway(s) info in the vpc """
@@ -62,13 +79,34 @@ class InternetGateway():
             return None
         return int_gate_info
 
-    def modify(self):
+    def modify(self, **kwargs):
         """ modify the internet gateway """
-        print('modify TODO')
+        modify = kwargs.get('modify', {})
+        gateway = kwargs.get('gateway', {})
+        vpc = kwargs.get('vpc', {})
+        try:
+            int_gate_session = self.session.get_client_session(service='ec2')
+            obj_int_gate = int_gate_session.InternetGateway(gateway)
+            if modify == 'attach':
+                obj_int_gate.attach_to_vpc(VpcId=vpc)
+            if modify == 'detach':
+                obj_int_gate.detach_from_vpc(VpcId=vpc)
+            return True
+        except Exception as err:
+            critical('Unable to {} the internet gateway, error {}'.format(modify, err))
+            return False
 
-    def destroy(self):
+    def destroy(self, **kwargs):
         """ destroy the internet gateway"""
-        print('destroy TODO')
+        gateway = kwargs.get('gateway', {})
+        try:
+            int_gate_session = self.session.get_client_session(service='ec2')
+            obj_int_gate = int_gate_session.InternetGateway(gateway)
+            obj_int_gate.delete()
+            return True
+        except Exception as err:
+            critical('Unable to destroy the internet gateway, error {}'.format(err))
+            return False
 
     @classmethod
     def __get_info(cls, **kwargs):
