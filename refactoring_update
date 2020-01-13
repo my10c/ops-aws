@@ -14,6 +14,11 @@ v2:
 	zone : ok
 
 
+January 12, 2020
+V2:
+	internet-gateway: ok
+	nat-gateway: ok
+
 Next:
 vpc :
-  subnet, nat-gateway, internet-gateway,  route-table :  part of vpc next
+  subnet, route-table :  part of vpc next
