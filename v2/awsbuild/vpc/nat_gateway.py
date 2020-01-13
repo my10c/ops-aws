@@ -9,7 +9,9 @@
 
 from pprint import PrettyPrinter
 from logging import critical, warning
-
+import awsbuild.const as const
+from awsbuild.misc.spinner import spin_message
+from awsbuild.aws.tag import create_resource_id_tag as set_tag
 
 class NATGateway():
     """ Class for the AWS NAT Gateaway
@@ -32,18 +34,35 @@ class NATGateway():
             return self.describe()
         if self.cmd_cfg['command'] == 'create':
             return self.create()
-        if self.cmd_cfg['command'] == 'modify':
-            return self.modify()
         if self.cmd_cfg['command'] == 'destroy':
             return self.destroy()
         return False
 
-    def create(self):
-        """ create the NAT gateway  """
-        print('create TODO')
+    def create(self, **kwargs):
+        """ create a NAT gateway  """
+        eip = kwargs.get('eip', {})
+        subnet = kwargs.get('subnet', {})
+        tag = kwargs.get('tag', {})
+        try:
+            nat_gate_session = self.session.get_client_session(service='ec2')
+            obj_nat_gate = nat_gate_session.create_nat_gateway(
+                AllocationId=eip,
+                SubnetId=subnet
+            )
+            spin_message(
+                message='Waiting {} seconds for the NAT gateway to become available'.\
+                    format(const.TIMER),
+                seconds=const.TIMER
+            )
+            set_tag(session=nat_gate_session, resource_id=obj_nat_gate['NatGateway']['NatGatewayId'],\
+                tag_name='Name', tag_value=tag)
+            return obj_nat_gate['NatGateway']['NatGatewayId']
+        except Exception as err:
+            critical('Unable to create the NAT gateway, error {}'.format(err))
+            return None
 
     def describe(self):
-        """ get the NAT gateway(s) info in the vpc """
+        """ get the NAT gateway(s) info """
         nat_gate_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(nat_gate_info['NatGateways']) == 0:
@@ -55,20 +74,26 @@ class NATGateway():
             output.pprint(info)
 
     def get_info(self):
-        """ get the internet gateway(s) info in the vpc """
+        """ get the NAT gateway(s) info """
         nat_gate_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(nat_gate_info['NatGateways']) == 0:
             return None
         return nat_gate_info
 
-    def modify(self):
-        """ modify the NAT gateway """
-        print('modify TODO')
-
-    def destroy(self):
-        """ destroy the NAT gateway """
-        print('destroy TODO')
+    def destroy(self, **kwargs):
+        """ destroy a NAT gateway """
+        nat_gateway_id = kwargs.get('id', {})
+        try:
+            nat_gate_session = self.session.get_client_session(service='ec2')
+            nat_gate_session.delete_nat_gateway(
+                NatGatewayId=nat_gateway_id
+            )
+            return True
+        except Exception as err:
+            critical('Unable to delete the gateway {}, error {}'.\
+                format(nat_gateway_id, err))
+            return False
 
     @classmethod
     def __get_info(cls, **kwargs):
@@ -77,11 +102,11 @@ class NATGateway():
         cls.filters = kwargs.get('filters', {})
         try:
             cls.nat_gate_session = cls.session.get_client_session(service='ec2')
-            nat_gate_info = cls.nat_gate_session.describe_internet_gateways(
+            nat_gate_info = cls.nat_gate_session.describe_nat_gateways(
                 Filters=cls.filters
             )
             return nat_gate_info
         except Exception as err:
-            warning('Unable to get info of the Internet gateway(s), filter {}. Error: {}'.\
+            warning('Unable to get info of the NAT gateway(s), filter {}. Error: {}'.\
                 format(cls.filters, err))
             return None

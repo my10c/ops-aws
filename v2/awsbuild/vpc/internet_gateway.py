@@ -13,8 +13,6 @@ import awsbuild.const as const
 from awsbuild.misc.spinner import spin_message
 from awsbuild.aws.tag import create_resource_id_tag as set_tag
 
-
-
 class InternetGateway():
     """ Class for AWS Internet Gateway
     """
@@ -43,7 +41,7 @@ class InternetGateway():
         return False
 
     def create(self):
-        """ create a internet gateway  """
+        """ create an internet gateway  """
         try:
             int_gate_session = self.session.get_client_session(service='ec2')
             obj_int_gate = int_gate_session.create_internet_gateway()
@@ -60,7 +58,7 @@ class InternetGateway():
             return None
 
     def describe(self):
-        """ get the internet gateway(s) info in the vpc """
+        """ get the internet gateway(s) info """
         int_gate_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(int_gate_info['InternetGateways']) == 0:
@@ -72,7 +70,7 @@ class InternetGateway():
             output.pprint(info)
 
     def get_info(self):
-        """ get the internet gateway(s) info in the vpc """
+        """ get the internet gateway(s) info """
         int_gate_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(int_gate_info['InternetGateways']) == 0:
@@ -80,7 +78,7 @@ class InternetGateway():
         return int_gate_info
 
     def modify(self, **kwargs):
-        """ modify the internet gateway """
+        """ modify an internet gateway """
         modify = kwargs.get('modify', {})
         gateway = kwargs.get('gateway', {})
         vpc = kwargs.get('vpc', {})
@@ -97,7 +95,7 @@ class InternetGateway():
             return False
 
     def destroy(self, **kwargs):
-        """ destroy the internet gateway"""
+        """ destroy an internet gateway"""
         gateway = kwargs.get('gateway', {})
         try:
             int_gate_session = self.session.get_client_session(service='ec2')
