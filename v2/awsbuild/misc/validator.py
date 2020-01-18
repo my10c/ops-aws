@@ -148,7 +148,7 @@ class Validator():
             with yaml_file as ymlfile:
                 config_data = yaml.safe_load(ymlfile)
         except Exception as err:
-            critical('Could not open the file or yaml format issue {}. Error: {}'.\
+            critical('Could not open the file or yaml format issue {}, error: {}'.\
                format(cls.fqpn, err))
             sys.exit(1)
         if cls.name not in config_data:

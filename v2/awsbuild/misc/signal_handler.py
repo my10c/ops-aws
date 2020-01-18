@@ -18,7 +18,7 @@ def signal_handler(signum, frame):
     elif signum is int(signal.SIGINT):
         print('Received ctrl-c, aborted on your request. {}'.format(frame))
     elif signum is int(signal.SIGTERM):
-        print('Received kill -TERM, terminating. {}'.format(frame))
+        print('Received -TERM, terminating. {}'.format(frame))
     else:
         print('Received unknwon interrupt : {}'.format(signum))
     sys.exit(128 + signum)
