@@ -29,7 +29,7 @@ __usage_txt__ = (
     '\t[-service=<aws service name>]\n '
     '\t[-command=<service command>]\n '
     '\t[-name=<name>]\n '
-    '\t[-help] [-version]'
+    '\t[-help] [-version] [-show]'
 )
 __valid_args__ = [
     'configdir',
@@ -40,7 +40,8 @@ __valid_args__ = [
 ]
 
 __optional_args__ = {
-    'name': ['', 'Required for the keypair service, other is optional']
+    'name': ['', 'Required for the keypair service, for other service it\'s optional'],
+    'show': [False, 'Show available services and their commands and the available regions']
 }
 
 # Defaults
@@ -70,6 +71,7 @@ CFG_FILES = {
     'vpc': ['vpc.yaml', 'aws'],
     'zone': ['none', 'vpc', 'aws']
 }
+
 SERVICE_ACTIONS = {
     'autoscale-group': ['create', 'describe', 'modify', 'destroy'],
     'elbv2': ['create', 'describe', 'modify', 'destroy'],
@@ -87,11 +89,35 @@ SERVICE_ACTIONS = {
     'vpc': ['create', 'describe', 'destroy'],
     'zone': ['describe'],
 }
+
 SERVICE_REQUIRE_NAME_WITH_COMMAND = {
     'elbv2': ['create', 'destroy'],
-    'keypair': ['create', 'modify', 'destroy'],
-    'vpc': ['none']
+    'keypair': ['create', 'modify', 'destroy']
 }
 
+# for show and should be maintaint
+_CURRENT_REGIONS = {
+    'us-east-2': 'US East (Ohio)',
+    'us-east-1': 'US East (N. Virginia)',
+    'us-west-1': 'US West (N. California)',
+    'us-west-2': 'US West (Oregon)',
+    'ap-east-1': 'Asia Pacific (Hong Kong)',
+    'ap-south-1': 'Asia Pacific (Mumbai)',
+    'ap-northeast-3': 'Asia Pacific (Osaka-Local)',
+    'ap-northeast-2': 'Asia Pacific (Seoul)',
+    'ap-southeast-1': 'Asia Pacific (Singapore)',
+    'ap-southeast-2': 'Asia Pacific (Sydney)',
+    'ap-northeast-1': 'Asia Pacific (Tokyo)',
+    'ca-central-1': 'Canada (Central)',
+    'cn-north-1': 'China (Beijing)',
+    'cn-northwest-1': 'China (Ningxia)',
+    'eu-central-1': 'EU (Frankfurt)',
+    'eu-west-1': 'EU (Ireland)',
+    'eu-west-2': 'EU (London)',
+    'eu-west-3': 'EU (Paris)',
+    'eu-north-1': 'EU (Stockholm)',
+    'me-south-1': 'Middle East (Bahrain)',
+    'sa-east-1': 'South America (Sao Paulo)'
+}
 MIN_CIDR_V4 = 21
 MIN_CIDR_V6 = 56

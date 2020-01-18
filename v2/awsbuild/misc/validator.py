@@ -20,16 +20,17 @@ class Validator():
     def __init__(self, **kwargs):
         """ initial the object """
         given_args = kwargs.get('given_arg', {})
-        self.configdir = given_args['configdir']
-        self.region = given_args['region']
-        self.service = given_args['service']
-        self.command = given_args['command']
-        self.tag = given_args['tag']
-        self.name = given_args['name']
-        self.valid = {}
-        self.settings = {}
-        # check given configuration directory
-        self._valid_dir(fqpn=self.configdir)
+        if given_args:
+            self.configdir = given_args['configdir']
+            self.region = given_args['region']
+            self.service = given_args['service']
+            self.command = given_args['command']
+            self.tag = given_args['tag']
+            self.name = given_args['name']
+            self.valid = {}
+            self.settings = {}
+            # check given configuration directory
+            self._valid_dir(fqpn=self.configdir)
 
     def get_valid(self):
         """ get the valid configuration
@@ -190,3 +191,22 @@ class Validator():
             critical('Could not open the file or yaml format issue {}, error: {}'.\
                 format(cls.fqpn, err))
             sys.exit(1)
+
+def show(**kwargs):
+    """ describe the services, command and regions
+    """
+    service_info = []
+    req_service = kwargs.get('service', '')
+    if req_service == '':
+        service_info = const.SERVICE_ACTIONS
+    else:
+        service_info.append(req_service)
+    for service in service_info:
+        print('\n⚬ Service {}, available command {}'.\
+            format(service, const.SERVICE_ACTIONS[service]))
+        if service in const.CFG_FILES:
+            print('\trequired configuration file {}'.\
+                format(const.CFG_FILES[service][0]))
+            print('\tdepends on configuration file(s) of {}'.\
+                format(' and '.join(const.CFG_FILES[service][1:])))
+    return True

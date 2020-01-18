@@ -7,7 +7,7 @@
 # All rights reserved.
 # BSD 3-Clause License : http://www.freebsd.org/copyright/freebsd-license.html
 
-#import os
+import sys
 import logging
 #from logging import critical
 import argparse
@@ -15,6 +15,7 @@ import argparse
 import awsbuild.const as const
 from awsbuild.misc.signal_handler import install_int_handler
 from awsbuild.misc.validator import Validator
+from awsbuild.misc.validator import show
 from awsbuild.connector.connector import Connector
 from awsbuild.ec2.autoscale_group import AutoscaleGroup
 from awsbuild.ec2.elbv2 import ELBV2
@@ -77,6 +78,10 @@ def main():
             help=const.__optional_args__[arg][1],
         )
     args = parser.parse_args()
+
+    # if -show was given
+    if arg.show:
+        return show()
 
     # setup logging
     count_down_message(message='Setting up logs', seconds=3)
