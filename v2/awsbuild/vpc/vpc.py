@@ -38,6 +38,10 @@ class VPC():
             return self.destroy()
         return False
 
+    def create(self):
+        """ create the vpc  """
+        print('create TODO')
+
     def describe(self):
         """ get the vpc info """
         # we assume there is only 1 vpc with the set tag
@@ -61,7 +65,13 @@ class VPC():
             filters=self.filter)
         if len(vpc_info['Vpcs']) == 0:
             return None
+        if len(vpc_info['Vpcs']) > 1:
+            return None
         return vpc_info
+
+    def modify(self):
+        """ create the vpc attribute  """
+        print('create TODO')
 
     def get_cidr(self):
         """ get the vpc ipv4 and ipv6 cidr from the given vpc tag """
@@ -85,26 +95,9 @@ class VPC():
         print('{}'.format(vpc_cidr))
         return vpc_cidr
 
-    def create(self):
-        """ create the vpc  """
-        print('create TODO')
-
-    def modify(self):
-        """ create the vpc attribute  """
-        print('create TODO')
-
     def destroy(self):
         """ destroy the vpc """
         print('destroy TODO')
-
-    def getid(self):
-        """ get the vpc if from the given vpc tag """
-        vpc_ids, _ = self.describe()
-        if len(vpc_ids) != 1:
-            print('Error, either not found or found more then one VPC with the given tag')
-            print('Please be more speciific with the tag, cancelling!')
-            return None
-        return vpc_ids[0]
 
     @classmethod
     def __get_info(cls, **kwargs):

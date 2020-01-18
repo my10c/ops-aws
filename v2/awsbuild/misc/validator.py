@@ -187,6 +187,6 @@ class Validator():
             with yaml_file as ymlfile:
                 return yaml.safe_load(ymlfile)
         except Exception as err:
-            critical('Could not open the file or yaml format issue {}. Error: {}'.\
+            critical('Could not open the file or yaml format issue {}, error: {}'.\
                 format(cls.fqpn, err))
             sys.exit(1)

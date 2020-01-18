@@ -20,7 +20,7 @@ def create_resource_tag(**kwargs):
         )
         return True
     except Exception as err:
-        warning('Unable to set the {} tag Error: {}'.format(tag_name, err))
+        warning('Unable to set the {} tag, error: {}'.format(tag_name, err))
         return False
 
 def create_resource_id_tag(**kwargs):
@@ -37,5 +37,5 @@ def create_resource_id_tag(**kwargs):
         )
         return True
     except Exception as err:
-        warning('Unable to set the {} tag Error: {}'.format(tag_name, err))
+        warning('Unable to set the {} tag, error: {}'.format(tag_name, err))
         return False

@@ -10,7 +10,6 @@
 from pprint import PrettyPrinter
 from logging import critical, warning
 
-
 class KeyPair():
     """ Class for the AWS KeyPair
     """
@@ -55,22 +54,23 @@ class KeyPair():
 
     def describe(self):
         """ get the keypair(s) info """
-        try:
-            keypair_session = self.session.get_client_session(service='ec2')
-            key_info = keypair_session.describe_key_pairs(
-                Filters=self.filter
-            )
-            if len(key_info['KeyPairs']) == 0:
-                print('\n⚬ No keypair found, filter {}'.format(self.filter))
-                return True
-            output = PrettyPrinter(indent=2, width=41, compact=False)
-            for info in key_info['KeyPairs']:
-                print('\n⚬ KeyPair ID {}'.format(info['KeyPairId']))
-                output.pprint(info)
-            return True
-        except Exception as err:
-            warning('Unable to get info of the key pair named {}. Error: {}'.format(self.name, err))
+        key_info = self.__get_info(session=self.session,\
+            Filters=self.filter)
+        if len(key_info['KeyPairs']) == 0:
+            print('\n⚬ No keypair found, filter {}'.format(self.filter))
+            return
+        output = PrettyPrinter(indent=2, width=41, compact=False)
+        for info in key_info['KeyPairs']:
+            print('\n⚬ KeyPair ID {}'.format(info['KeyPairId']))
+            output.pprint(info)
+
+    def get_info(self):
+        """ get the keypair(s) info """
+        key_info = self.__get_info(session=self.session,\
+            Filters=self.filter)
+        if len(key_info['KeyPairs']) == 0:
             return None
+        return key_info
 
     def modify(self):
         """ modify a keypair """
@@ -89,3 +89,18 @@ class KeyPair():
         except Exception as err:
             critical('Unable to destroy keypair {}. Error: {}'.format(self.name, err))
             return False
+
+    @classmethod
+    def __get_info(cls, **kwargs):
+        """ get info """
+        cls.session = kwargs.get('session', {})
+        cls.filters = kwargs.get('filters', {})
+        try:
+            cls.keypair_session = cls.session.get_client_session(service='ec2')
+            key_info = cls.keypair_session.describe_key_pairs(
+                Filters=cls.filters
+            )
+            return key_info
+        except Exception as err:
+            warning('Unable to get info key, error: {}'.format(err))
+            return None

@@ -33,12 +33,12 @@ class NetworkCalc():
         self.cidr_v6 = kwargs.get('cidr_v6', {})
         self.ipv6 = kwargs.get('ipv6', False)
         if int(self.cidr_v4) > self.min_cidr_v4:
-            critical('The CIDR v4 {} is too small, minimaal size is {}'.\
+            critical('The cidr v4 {} is too small, minimaal size is {}'.\
                 format(self.cidr_v4, self.min_cidr_v4))
             sys.exit(1)
         if self.ipv6:
             if int(self.cidr_v6) > self.min_cidr_v6:
-                critical('The CIDR v6 {} is too small, minimaal size is {}'.\
+                critical('The cidr v6 {} is too small, minimaal size is {}'.\
                     format(self.cidr_v6, self.min_cidr_v6))
                 sys.exit(1)
 
@@ -120,7 +120,7 @@ def is_valid(**kwargs):
         ip_type = ipaddress.ip_network(ip_address, strict=True)
         return str(ip_type.version)
     except Exception as err:
-        warning('Given IP address {} it invalid, Error {}'.format(ip_address, err))
+        warning('Given ip address {} it invalid, Error {}'.format(ip_address, err))
         return None
 
 def is_private(**kwargs):

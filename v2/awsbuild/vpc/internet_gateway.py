@@ -62,11 +62,11 @@ class InternetGateway():
         int_gate_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(int_gate_info['InternetGateways']) == 0:
-            print('\n⚬ No Internet Gateway found, filter {}'.format(self.filter))
+            print('\n⚬ No internet gateway found, filter {}'.format(self.filter))
             return
         output = PrettyPrinter(indent=2, width=41, compact=False)
         for info in int_gate_info['InternetGateways']:
-            print('\n⚬ Internet Gateway ID {}'.format(info['InternetGatewayId']))
+            print('\n⚬ Internet gateway id {}'.format(info['InternetGatewayId']))
             output.pprint(info)
 
     def get_info(self):
@@ -118,6 +118,6 @@ class InternetGateway():
             )
             return int_gate_info
         except Exception as err:
-            warning('Unable to get info of the Internet gateway(s), filter {}. Error: {}'.\
+            warning('Unable to get info of the internet gateway(s), filter {}, error: {}'.\
                 format(cls.filters, err))
             return None

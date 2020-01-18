@@ -46,11 +46,11 @@ class Subnet():
         subnet_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(subnet_info['Subnets']) == 0:
-            print('\n⚬ No Subnet found, filter {}'.format(self.filter))
+            print('\n⚬ No subnet found, filter {}'.format(self.filter))
             return
         output = PrettyPrinter(indent=2, width=41, compact=False)
         for info in subnet_info['Subnets']:
-            print('\n⚬ Subnet ID {}'.format(info['SubnetId']))
+            print('\n⚬ Subnet id {}'.format(info['SubnetId']))
             output.pprint(info)
 
     def get_info(self):
@@ -81,6 +81,6 @@ class Subnet():
             )
             return subnet_info
         except Exception as err:
-            warning('Unable to get the subnet info, filter {}. error {}'.\
+            warning('Unable to get the subnet info, filter {}, error {}'.\
                 format(cls.filters, err))
             return None

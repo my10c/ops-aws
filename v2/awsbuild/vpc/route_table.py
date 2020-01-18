@@ -45,11 +45,11 @@ class RouteTable():
         route_table_info = self.__get_info(session=self.session,\
               filters=self.filter)
         if len(route_table_info['RouteTables']) == 0:
-            print('\n⚬ No Route table found, filter {}'.format(self.filter))
+            print('\n⚬ No route table found, filter {}'.format(self.filter))
             return
         output = PrettyPrinter(indent=2, width=41, compact=False)
         for info in route_table_info['RouteTables']:
-            print('\n⚬ Route table Gateway ID {}'.format(info['RouteTableId']))
+            print('\n⚬ Route table id {}'.format(info['RouteTableId']))
             output.pprint(info)
 
     def get_info(self):
@@ -80,6 +80,6 @@ class RouteTable():
             )
             return route_table_info
         except Exception as err:
-            warning('Unable to get info of the route table  filter {}. Error: {}'.\
+            warning('Unable to get info of the route table filter {}, error: {}'.\
                   format(cls.filters, err))
             return None

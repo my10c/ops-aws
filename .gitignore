@@ -3,6 +3,7 @@
 *.pyc
 aws.yaml
 config/aws.yaml
+done
 v1/config/aws.yaml
 v2/config/aws.yaml
 logs/*

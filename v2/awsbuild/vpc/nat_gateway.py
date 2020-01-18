@@ -50,7 +50,7 @@ class NATGateway():
                 SubnetId=subnet
             )
             spin_message(
-                message='Waiting {} seconds for the NAT gateway to become available'.\
+                message='Waiting {} seconds for the nat gateway to become available'.\
                     format(const.TIMER),
                 seconds=const.TIMER
             )
@@ -58,7 +58,7 @@ class NATGateway():
                 tag_name='Name', tag_value=tag)
             return obj_nat_gate['NatGateway']['NatGatewayId']
         except Exception as err:
-            critical('Unable to create the NAT gateway, error {}'.format(err))
+            critical('Unable to create the nat gateway, error {}'.format(err))
             return None
 
     def describe(self):
@@ -66,11 +66,11 @@ class NATGateway():
         nat_gate_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(nat_gate_info['NatGateways']) == 0:
-            print('\n⚬ No NAT Gateway found, filter {}'.format(self.filter))
+            print('\n⚬ No nat gateway found, filter {}'.format(self.filter))
             return
         output = PrettyPrinter(indent=2, width=41, compact=False)
         for info in nat_gate_info['NatGateways']:
-            print('\n⚬ NAT Gateway ID {}'.format(info['NatGatewayId']))
+            print('\n⚬ NAT gateway ID {}'.format(info['NatGatewayId']))
             output.pprint(info)
 
     def get_info(self):
@@ -107,6 +107,6 @@ class NATGateway():
             )
             return nat_gate_info
         except Exception as err:
-            warning('Unable to get info of the NAT gateway(s), filter {}. Error: {}'.\
+            warning('Unable to get info of the nat gateway(s), filter {}. Error: {}'.\
                 format(cls.filters, err))
             return None
