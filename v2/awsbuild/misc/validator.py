@@ -196,6 +196,10 @@ def show(**kwargs):
     """
     service_info = []
     req_service = kwargs.get('service', '')
+    if req_service == 'regions':
+        for region in const.CURRENT_REGIONS:
+            print('⚬ {} : {}'.format(region, const.CURRENT_REGIONS[region]))
+        return True
     if req_service == '':
         service_info = const.SERVICE_ACTIONS
     else:

@@ -99,7 +99,7 @@ SERVICE_REQUIRE_NAME_WITH_COMMAND = {
 }
 
 # for show and should be maintaint
-_CURRENT_REGIONS = {
+CURRENT_REGIONS = {
     'us-east-2': 'US East (Ohio)',
     'us-east-1': 'US East (N. Virginia)',
     'us-west-1': 'US West (N. California)',
@@ -122,5 +122,6 @@ _CURRENT_REGIONS = {
     'me-south-1': 'Middle East (Bahrain)',
     'sa-east-1': 'South America (Sao Paulo)'
 }
+
 MIN_CIDR_V4 = 21
 MIN_CIDR_V6 = 56
