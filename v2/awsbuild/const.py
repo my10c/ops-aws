@@ -41,7 +41,10 @@ __valid_args__ = [
 
 __optional_args__ = {
     'name': ['', 'Required for the keypair service, for other service it\'s optional'],
-    'show': [False, 'Show available services and their commands and the available regions']
+    'show': [False, \
+        'Show available services and their commands, must be the only given argument.\n' +\
+        'Optional 2nd argument is service name, otherwise show all.\n' +\
+        'Once -show is given all other argument is ignore after the 2nd.']
 }
 
 # Defaults

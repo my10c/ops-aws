@@ -57,6 +57,13 @@ def main():
     # Install interrupt handler
     install_int_handler()
 
+    # if -show was given
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '-show':
+            if len(sys.argv) >= 3:
+                return show(service=str(sys.argv[2]))
+            return show()
+
     # Process giving arguments
     parser = argparse.ArgumentParser(
         usage=const.__usage_txt__, description=const.__description__,
@@ -78,10 +85,6 @@ def main():
             help=const.__optional_args__[arg][1],
         )
     args = parser.parse_args()
-
-    # if -show was given
-    if arg.show:
-        return show()
 
     # setup logging
     count_down_message(message='Setting up logs', seconds=3)
