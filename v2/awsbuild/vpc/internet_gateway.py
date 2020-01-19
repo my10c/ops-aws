@@ -14,7 +14,7 @@ from awsbuild.misc.spinner import spin_message
 from awsbuild.aws.tag import create_resource_id_tag as set_tag
 
 class InternetGateway():
-    """ Class for AWS Internet Gateway
+    """ class for aws internet gateway
     """
 
     def __init__(self, **kwargs):

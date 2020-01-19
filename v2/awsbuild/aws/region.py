@@ -11,7 +11,7 @@ from logging import warning
 from pprint import PrettyPrinter
 
 class Region():
-    """ Class to perform certain method to AWS region
+    """ class to perform certain method to AWS region
     """
 
     def __init__(self, **kwargs):

@@ -9,9 +9,12 @@
 
 from pprint import PrettyPrinter
 from logging import critical, warning
+import awsbuild.const as const
+from awsbuild.misc.spinner import spin_message
+from awsbuild.aws.tag import create_resource_id_tag as set_tag
 
 class VPC():
-    """ Class for the AWS VPC
+    """ class for the aws vpc
     """
 
     def __init__(self, **kwargs):
@@ -40,7 +43,27 @@ class VPC():
 
     def create(self):
         """ create the vpc  """
-        print('create TODO')
+        cidr = self.cmd_cfg['settings']['vpc']['network'] + '/' + self.cmd_cfg['settings']['vpc']['cidr']
+        ipv6 = self.cmd_cfg['settings']['vpc']['ipv6']
+        print('{} {}'.format(cidr, ipv6))
+        try:
+            vpc_session = self.session.get_client_session(service='ec2')
+            vpc_info = vpc_session.create_vpc(
+                CidrBlock=cidr,
+                AmazonProvidedIpv6CidrBlock=ipv6
+            )
+            spin_message(
+                message='Waiting {} seconds for the vpc to become available.'.\
+                    format(const.TIMER),
+                seconds=const.TIMER
+            )
+            set_tag(session=vpc_session, resource_id=vpc_info.vpc.id,\
+                tag_name='Name', tag_value=self.tag)
+            return vpc_info.vpc.id
+        except Exception as err:
+            critical('Unable to create the vpc info, error {}'.\
+                format(err))
+            return None
 
     def describe(self):
         """ get the vpc info """
@@ -48,13 +71,13 @@ class VPC():
         vpc_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(vpc_info['Vpcs']) == 0:
-            print('No VPC found with the given tag, please be more speciific')
+            print('No vpc found with the given tag, please be more speciific')
             return False
         if len(vpc_info['Vpcs']) > 1:
-            print('Found more then on VPC with the given tag, please be more speciific')
+            print('Found more then one vpc with the given tag, please be more speciific')
         output = PrettyPrinter(indent=2, width=41, compact=False)
         for info in vpc_info['Vpcs']:
-            print('\n⚬ VPC ID {}'.format(info['VpcId']))
+            print('\n⚬ VPC id {}'.format(info['VpcId']))
             output.pprint(info)
             return True
 
@@ -69,16 +92,31 @@ class VPC():
             return None
         return vpc_info
 
-    def modify(self):
-        """ create the vpc attribute  """
-        print('create TODO')
+    def modify(self, **kwargs):
+        """ modify the vpc attribute  """
+        modify_value = kwargs.get('modify', False)
+        vpc_id = kwargs.get('vpc_id', False)
+        try:
+            vpc_session = self.session.get_client_session(service='ec2')
+            vpc_obj = vpc_session.Vpc(vpc_id)
+            vpc_obj.modify_attribute(
+                EnableDnsSupport={'Value': modify_value}
+            )
+            vpc_obj.modify_attribute(
+                EnableDnsHostnames={'Value': modify_value}
+            )
+            return True
+        except Exception as err:
+            warning('Unable to set dns hostnames to {}, error {}'.\
+                format(modify_value, err))
+            return False
 
     def get_cidr(self):
         """ get the vpc ipv4 and ipv6 cidr from the given vpc tag """
         vpc_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(vpc_info['Vpcs']) != 1:
-            print('Error, either not found or found more then one VPC with the given tag')
+            print('Error, either not found or found more then one vpc with the given tag')
             print('Please be more speciific with the tag, cancelling!')
             return None
         vpc_cidr = {}
@@ -95,9 +133,21 @@ class VPC():
         print('{}'.format(vpc_cidr))
         return vpc_cidr
 
-    def destroy(self):
-        """ destroy the vpc """
-        print('destroy TODO')
+    def destroy(self, **kwargs):
+        """ destroy a vpc, it's requires that all component to be destroyed first:
+            gateways (internet and nat), instances, route tables, subnets and security groups
+            we need to delete/release the eip and volumes once the VPC has been destroyed
+        """
+        vpc_id = kwargs.get('vpc_id', False)
+        try:
+            vpc_session = self.session.get_client_session(service='ec2')
+            vpc_obj = vpc_session.Vpc(vpc_id)
+            vpc_obj.delete()
+            return True
+        except Exception as err:
+            critical('Unable to destroy the vpc with is {}, error {}'.\
+                format(vpc_id, err))
+            return False
 
     @classmethod
     def __get_info(cls, **kwargs):
@@ -111,6 +161,6 @@ class VPC():
             )
             return vpc_info
         except Exception as err:
-            warning('Unable to get the vpc info, filter {}. error {}'.\
+            warning('Unable to get the vpc info, filter {}, error {}'.\
                 format(cls.filters, err))
             return None

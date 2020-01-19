@@ -168,7 +168,7 @@ class Validator():
 
     @classmethod
     def _valid_file(cls, **kwargs):
-        """ check is file
+        """ check file
         """
         cls.fqpn = kwargs.get('fqpn', {})
         if not Path(cls.fqpn).is_file():

@@ -114,17 +114,17 @@ class NetworkCalc():
             return None
 
 def is_valid(**kwargs):
-    """ The function check if the given ip address is valid and is a IPv4 or IPv6 """
+    """ the function check if the given ip address is valid and is a IPv4 or IPv6 """
     ip_address = kwargs.get('ip', {})
     try:
         ip_type = ipaddress.ip_network(ip_address, strict=True)
         return str(ip_type.version)
     except Exception as err:
-        warning('Given ip address {} it invalid, Error {}'.format(ip_address, err))
+        warning('Given ip address {} it invalid, error {}'.format(ip_address, err))
         return None
 
 def is_private(**kwargs):
-    """ The function check if the given ip address is valid and is a IPv4 or IPv6 """
+    """ the function check if the given ip address is valid and is a IPv4 or IPv6 """
     ip_address = kwargs.get('ip', {})
     if is_valid(ip=ip_address) is not None:
         return ipaddress.ip_network(ip_address, strict=True).is_private

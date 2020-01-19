@@ -11,7 +11,7 @@ from logging import warning
 from pprint import PrettyPrinter
 
 class Zone():
-    """ Class to perform certain method to AWS Zone
+    """ class to perform certain method to AWS Zone
     """
 
     def __init__(self, **kwargs):

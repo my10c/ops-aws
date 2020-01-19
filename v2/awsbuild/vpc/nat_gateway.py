@@ -14,7 +14,7 @@ from awsbuild.misc.spinner import spin_message
 from awsbuild.aws.tag import create_resource_id_tag as set_tag
 
 class NATGateway():
-    """ Class for the AWS NAT Gateaway
+    """ class for the aws nat gateaway
     """
 
     def __init__(self, **kwargs):
@@ -39,7 +39,7 @@ class NATGateway():
         return False
 
     def create(self, **kwargs):
-        """ create a NAT gateway  """
+        """ create a nat gateway  """
         eip = kwargs.get('eip', {})
         subnet = kwargs.get('subnet', {})
         tag = kwargs.get('tag', {})
@@ -62,7 +62,7 @@ class NATGateway():
             return None
 
     def describe(self):
-        """ get the NAT gateway(s) info """
+        """ get the nat gateway(s) info """
         nat_gate_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(nat_gate_info['NatGateways']) == 0:
@@ -70,11 +70,11 @@ class NATGateway():
             return
         output = PrettyPrinter(indent=2, width=41, compact=False)
         for info in nat_gate_info['NatGateways']:
-            print('\n⚬ NAT gateway ID {}'.format(info['NatGatewayId']))
+            print('\n⚬ NAT gateway id {}'.format(info['NatGatewayId']))
             output.pprint(info)
 
     def get_info(self):
-        """ get the NAT gateway(s) info """
+        """ get the nat gateway(s) info """
         nat_gate_info = self.__get_info(session=self.session,\
             filters=self.filter)
         if len(nat_gate_info['NatGateways']) == 0:
@@ -82,7 +82,7 @@ class NATGateway():
         return nat_gate_info
 
     def destroy(self, **kwargs):
-        """ destroy a NAT gateway """
+        """ destroy a nat gateway """
         nat_gateway_id = kwargs.get('id', {})
         try:
             nat_gate_session = self.session.get_client_session(service='ec2')
@@ -91,7 +91,7 @@ class NATGateway():
             )
             return True
         except Exception as err:
-            critical('Unable to delete the gateway {}, error {}'.\
+            critical('Unable to delete the nat gateway {}, error {}'.\
                 format(nat_gateway_id, err))
             return False
 
@@ -107,6 +107,6 @@ class NATGateway():
             )
             return nat_gate_info
         except Exception as err:
-            warning('Unable to get info of the nat gateway(s), filter {}. Error: {}'.\
+            warning('Unable to get info of the nat gateway(s), filter {}, error: {}'.\
                 format(cls.filters, err))
             return None

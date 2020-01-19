@@ -13,18 +13,22 @@ import sys
 def signal_handler(signum, frame):
     """ signal/interrupts handler
     """
+    known_signal = 0
     if signum is int(signal.SIGHUP):
         print('Received -HUP, app does not support reload. {}'.format(frame))
-    elif signum is int(signal.SIGINT):
+        known_signal = 1
+    if signum is int(signal.SIGINT):
         print('Received ctrl-c, aborted on your request. {}'.format(frame))
-    elif signum is int(signal.SIGTERM):
+        known_signal = 1
+    if signum is int(signal.SIGTERM):
         print('Received -TERM, terminating. {}'.format(frame))
-    else:
+        known_signal = 1
+    if known_signal == 0:
         print('Received unknwon interrupt : {}'.format(signum))
     sys.exit(128 + signum)
 
 def install_int_handler():
-    """ Install signal/interrupts handler, we capture only SIGHUP, SIGINT and TERM
+    """ install signal/interrupts handler, we capture only SIGHUP, SIGINT and TERM
     """
     signal.signal(signal.SIGHUP, signal_handler)
     signal.signal(signal.SIGINT, signal_handler)

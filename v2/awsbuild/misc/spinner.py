@@ -12,7 +12,7 @@ import threading
 from time import sleep
 
 class SpinCursor(threading.Thread):
-    """ Class and function so display a wait spinner (dots or wheel)
+    """ class and function so display a wait spinner (dots or wheel)
     """
 
     def __init__(self, msg=None, maxspin=0, minspin=10, speed=5, mode=None):
@@ -38,7 +38,7 @@ class SpinCursor(threading.Thread):
         threading.Thread.__init__(self, None, None, "Spin Thread")
 
     def spin(self):
-        """ Perform a single spin """
+        """ perform a single spin """
         for spinchar in self.spinchars:
             if self.msg:
                 self.string = self.msg + '...\t' + spinchar + '\r'
@@ -70,7 +70,7 @@ def spin_message(message=None, seconds=None):
     spin.stop()
 
 def dot_message(message=None, seconds=None):
-    """ fucntion to print dot while sleeping for the given seconds. """
+    """ print dots while and wait for the given seconds """
     spin = SpinCursor(msg=message, minspin=seconds, speed=1, mode='dots')
     spin.start()
     sleep(seconds)

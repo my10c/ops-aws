@@ -60,7 +60,7 @@ def main():
     # if -show was given
     if len(sys.argv) > 1:
         if sys.argv[1] == '-show':
-            if len(sys.argv) >= 3:
+            if len(sys.argv) >= 3 and not str(sys.argv[2]).startswith('-'):
                 return show(service=str(sys.argv[2]))
             return show()
 

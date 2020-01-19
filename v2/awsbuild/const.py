@@ -40,11 +40,12 @@ __valid_args__ = [
 ]
 
 __optional_args__ = {
-    'name': ['', 'Required for the keypair service, for other service it\'s optional'],
+    'name': ['', 'Required for the keypair service, for other service it\'s optional.'],
     'show': [False, \
-        'Show available services and their commands, must be the only given argument.\n' +\
-        'Optional 2nd argument is service name, otherwise show all.\n' +\
-        'Once -show is given all other argument is ignore after the 2nd.']
+        'Show available services and their commands, must be the only given argument. ' +\
+        'Optional 2nd argument is service name, otherwise show all. ' +\
+        'Once -show is given all other argument is ignore after the 2nd. ' +\
+        'Use \'regions\' as second argument to show know aws regions.']
 }
 
 # Defaults
@@ -72,7 +73,8 @@ CFG_FILES = {
     'subnet': ['none', 'aws', 'vpc'],
     'target-group': ['target_group.yaml', 'aws', 'vpc'],
     'vpc': ['vpc.yaml', 'aws'],
-    'zone': ['none', 'vpc', 'aws']
+    'zone': ['none', 'vpc', 'aws'],
+    'infra': ['none', 'vpc', 'aws', 'security_group']
 }
 
 SERVICE_ACTIONS = {
@@ -91,6 +93,7 @@ SERVICE_ACTIONS = {
     'target-group': ['create', 'describe', 'modify', 'destroy'],
     'vpc': ['create', 'describe', 'destroy'],
     'zone': ['describe'],
+    'infra': ['create', 'describe', 'destroy']
 }
 
 SERVICE_REQUIRE_NAME_WITH_COMMAND = {
